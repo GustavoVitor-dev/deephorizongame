@@ -6,39 +6,64 @@
 'use strict';
 
 /* ── Custom Cursor ── */
-(function() {
-  const dot  = document.getElementById('cursor');
+(function () {
+  const dot = document.getElementById('cursor');
   const ring = document.getElementById('cursor-ring');
-  let rx = 0, ry = 0;
+
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+  let isMoving = false;
 
   document.addEventListener('mousemove', e => {
-    dot.style.left  = e.clientX + 'px';
-    dot.style.top   = e.clientY + 'px';
-    setTimeout(() => {
-      ring.style.left = e.clientX + 'px';
-      ring.style.top  = e.clientY + 'px';
-    }, 90);
+    if (!isMoving) {
+      ringX = e.clientX;
+      ringY = e.clientY;
+      isMoving = true;
+    }
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    // O ponto segue instantaneamente
+    dot.style.left = mouseX + 'px';
+    dot.style.top = mouseY + 'px';
   });
+
+  function animate() {
+    if (isMoving) {
+      // Interpolação linear (lerp): atual + (alvo - atual) * fator
+      // 0.15 é um bom equilíbrio entre fluidez e resposta
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+    }
+
+    requestAnimationFrame(animate);
+  }
+  animate();
 
   document.querySelectorAll('a, button, .lore-card, .mech-card, .monster-card, .team-card').forEach(el => {
     el.addEventListener('mouseenter', () => {
-      dot.style.width  = '18px';
+      dot.style.width = '18px';
       dot.style.height = '18px';
-      ring.style.width  = '50px';
+      ring.style.width = '50px';
       ring.style.height = '50px';
+      ring.style.borderColor = 'var(--teal)';
     });
     el.addEventListener('mouseleave', () => {
-      dot.style.width  = '10px';
+      dot.style.width = '10px';
       dot.style.height = '10px';
-      ring.style.width  = '34px';
+      ring.style.width = '34px';
       ring.style.height = '34px';
+      ring.style.borderColor = 'rgba(0, 200, 255, 0.5)';
     });
   });
 })();
 
 
 /* ── Scroll Reveal ── */
-(function() {
+(function () {
   const els = document.querySelectorAll('.reveal');
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => {
@@ -53,10 +78,10 @@
 
 
 /* ── Nav active state + scrolled ── */
-(function() {
+(function () {
   const nav = document.getElementById('nav');
   const links = document.querySelectorAll('.nav-links a');
-  const sections = ['hero','lore','gameplay','weapons','monsters','element-sec','wreck','team'];
+  const sections = ['hero', 'lore', 'gameplay', 'weapons', 'monsters', 'element-sec', 'wreck', 'team'];
 
   window.addEventListener('scroll', () => {
     // scrolled class
@@ -71,7 +96,7 @@
       if (el.getBoundingClientRect().top <= 90) current = id;
     });
     links.forEach(a => {
-      const href = a.getAttribute('href').replace('#','');
+      const href = a.getAttribute('href').replace('#', '');
       a.classList.toggle('active', href === current);
     });
   }, { passive: true });
@@ -86,23 +111,23 @@ function spawnBubbles(containerId, count) {
     const b = document.createElement('div');
     b.className = 'bub';
     const size = Math.random() * 12 + 2;
-    b.style.width  = size + 'px';
+    b.style.width = size + 'px';
     b.style.height = size + 'px';
-    b.style.left   = Math.random() * 100 + '%';
+    b.style.left = Math.random() * 100 + '%';
     b.style.bottom = (-size) + 'px';
-    b.style.animationDuration  = (Math.random() * 14 + 7) + 's';
-    b.style.animationDelay     = (Math.random() * 10) + 's';
-    b.style.opacity            = (Math.random() * .35 + .08);
+    b.style.animationDuration = (Math.random() * 14 + 7) + 's';
+    b.style.animationDelay = (Math.random() * 10) + 's';
+    b.style.opacity = (Math.random() * .35 + .08);
     c.appendChild(b);
   }
 }
 
-['bubbles-hero','bubbles-lore','bubbles-gameplay','bubbles-weapons',
- 'bubbles-monsters','bubbles-element','bubbles-wreck'].forEach(id => spawnBubbles(id, 18));
+['bubbles-hero', 'bubbles-lore', 'bubbles-gameplay', 'bubbles-weapons',
+  'bubbles-monsters', 'bubbles-element', 'bubbles-wreck'].forEach(id => spawnBubbles(id, 18));
 
 
 /* ── Element Particles (green glow drifters) ── */
-(function() {
+(function () {
   const layer = document.getElementById('element-particle-layer');
   if (!layer) return;
   for (let i = 0; i < 28; i++) {
@@ -125,7 +150,7 @@ function spawnBubbles(containerId, count) {
 
 
 /* ── Animate stat bars on scroll into view ── */
-(function() {
+(function () {
   const bars = document.querySelectorAll('.el-stat-fill, .wstat-fill');
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => {
@@ -151,7 +176,7 @@ function spawnBubbles(containerId, count) {
 
 
 /* ── Monster card flicker on hover ── */
-(function() {
+(function () {
   document.querySelectorAll('.monster-card').forEach(card => {
     const cvs = card.querySelector('canvas');
     if (!cvs) return;
@@ -167,7 +192,7 @@ function spawnBubbles(containerId, count) {
 
 
 /* ── Depth number counter animation in hero ── */
-(function() {
+(function () {
   const el = document.getElementById('depth-num');
   if (!el) return;
   let lastVal = 0;
@@ -185,12 +210,12 @@ function spawnBubbles(containerId, count) {
 
 
 /* ── Glitch effect on title (rare) ── */
-(function() {
+(function () {
   const title = document.querySelector('.hero-title');
   if (!title) return;
   function glitch() {
-    title.style.transform = `skewX(${(Math.random()-.5)*3}deg) translateX(${(Math.random()-.5)*4}px)`;
-    title.style.filter = `hue-rotate(${Math.random()*30}deg)`;
+    title.style.transform = `skewX(${(Math.random() - .5) * 3}deg) translateX(${(Math.random() - .5) * 4}px)`;
+    title.style.filter = `hue-rotate(${Math.random() * 30}deg)`;
     setTimeout(() => {
       title.style.transform = '';
       title.style.filter = '';
@@ -206,7 +231,7 @@ function spawnBubbles(containerId, count) {
 
 
 /* ── Typewriter for hero eyebrow ── */
-(function() {
+(function () {
   const el = document.querySelector('.hero-eyebrow');
   if (!el) return;
   const text = el.textContent;
