@@ -1700,3 +1700,24 @@ body.is-horror #depth-sidebar {
   pointer-events: none;
   transition: opacity 0.8s ease;
 }
+
+body.is-horror #cursor,
+body.is-horror #cursor-ring {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body.is-horror {
+  cursor: none;
+}
+
+html.is-horror {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+html.is-horror::-webkit-scrollbar {
+  display: none;
+}

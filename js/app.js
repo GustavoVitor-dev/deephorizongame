@@ -106,6 +106,7 @@
     // Toggle horror mode UI visibility
     const isHorror = current === 'encounter';
     document.body.classList.toggle('is-horror', isHorror);
+    document.documentElement.classList.toggle('is-horror', isHorror);
 
     // Audio & Video control
     const ambient = document.getElementById('horror-ambient');
@@ -155,11 +156,18 @@
   // Global click to unlock audio context (Browser requirement)
   window.addEventListener('click', () => {
     const ambient = document.getElementById('horror-ambient');
+    const video = document.getElementById('horror-video');
     if (ambient) {
       if (document.body.classList.contains('is-horror') && !document.body.classList.contains('video-ended')) {
         ambient.volume = 1;
         if (ambient.paused) {
           ambient.play().catch(() => { });
+        }
+        if (video) {
+          video.muted = false;
+          if (video.paused) {
+            video.play().catch(() => { });
+          }
         }
       }
     }
