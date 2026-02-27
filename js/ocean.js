@@ -6,7 +6,7 @@
 'use strict';
 
 /* ── Ocean Background Canvas ── */
-const Ocean = (function() {
+const Ocean = (function () {
   const canvas = document.getElementById('ocean-bg');
   const ctx = canvas.getContext('2d');
   let W, H, time = 0;
@@ -16,7 +16,7 @@ const Ocean = (function() {
   const pts = [];
   function initParticles() {
     pts.length = 0;
-    for(let i = 0; i < 160; i++) {
+    for (let i = 0; i < 160; i++) {
       pts.push({
         x: Math.random() * W,
         y: Math.random() * H,
@@ -48,16 +48,16 @@ const Ocean = (function() {
     const d = Math.min(scrollRatio, 1);
 
     // Deepening background
-    const rC = Math.round(1  + 12 * (1 - d));
-    const gC = Math.round(3  + 22 * (1 - d));
-    const bC = Math.round(8  + 46 * (1 - d));
+    const rC = Math.round(1 + 12 * (1 - d));
+    const gC = Math.round(3 + 22 * (1 - d));
+    const bC = Math.round(8 + 46 * (1 - d));
     ctx.fillStyle = `rgb(${rC},${gC},${bC})`;
     ctx.fillRect(0, 0, W, H);
 
     // Caustic light rays (only near surface)
     if (d < .65) {
       const opacity = (.65 - d) * .12;
-      for(let i = 0; i < 6; i++) {
+      for (let i = 0; i < 6; i++) {
         const rx = (Math.sin(time * .22 + i * 1.5) * .5 + .5) * W;
         const ry = (Math.sin(time * .16 + i * .8) * .5 + .5) * H * .7;
         const grd = ctx.createRadialGradient(rx, ry, 0, rx, ry, 100 + Math.sin(time + i) * 30);
@@ -71,7 +71,7 @@ const Ocean = (function() {
     // Bioluminescent glow (deeper sections)
     if (d > .45) {
       const bOp = (d - .45) * .18;
-      for(let i = 0; i < 4; i++) {
+      for (let i = 0; i < 4; i++) {
         const gx = (Math.sin(time * .15 + i * 2.1) * .5 + .5) * W;
         const gy = (Math.sin(time * .12 + i * 1.4) * .5 + .5) * H;
         const grd = ctx.createRadialGradient(gx, gy, 0, gx, gy, 80);
@@ -124,30 +124,37 @@ const Ocean = (function() {
 
 
 /* ── Submarine Controller ── */
-const SubController = (function() {
-  const wrap    = document.getElementById('sub-wrap');
-  const subCvs  = document.getElementById('sub-canvas');
-  const glow    = document.getElementById('sub-glow');
+const SubController = (function () {
+  const wrap = document.getElementById('sub-wrap');
+  const subCvs = document.getElementById('sub-canvas');
+  const glow = document.getElementById('sub-glow');
 
   let curX = 100, curY = 200;
   let tgtX = 100, tgtY = 200;
   let flipped = false;
   let animT = 0;
   let depth = 0;
+  let inspiState = 0;
+
+  // GSAP Proxy for sub movement during cutscene
+  const animProxy = { tgtX: 100, tgtRot: 0 };
+
+  wrap.setAttribute('data-dir', 'left');
 
   // Section target positions (xRatio, yRatio)
   const targets = [
-    { xr:.68, yr:.22 },  // hero
-    { xr:.12, yr:.48 },  // lore
-    { xr:.70, yr:.28 },  // gameplay
-    { xr:.15, yr:.55 },  // weapons
-    { xr:.72, yr:.42 },  // monsters
-    { xr:.18, yr:.35 },  // element
-    { xr:.60, yr:.50 },  // wreck
-    { xr:.45, yr:.18 },  // team
+    { xr: .68, yr: .22 },  // hero
+    { xr: .12, yr: .48 },  // lore
+    { xr: .70, yr: .28 },  // gameplay
+    { xr: .15, yr: .55 },  // weapons
+    { xr: .72, yr: .42 },  // monsters
+    { xr: .18, yr: .35 },  // element
+    { xr: .60, yr: .50 },  // wreck
+    { xr: .30, yr: .32 },  // inspiration (will rest here on the left, looking right)
+    { xr: .45, yr: .18 },  // team
   ];
 
-  const sectionIds = ['hero','lore','gameplay','weapons','monsters','element-sec','wreck','team'];
+  const sectionIds = ['hero', 'lore', 'gameplay', 'weapons', 'monsters', 'element-sec', 'wreck', 'inspiration', 'team'];
 
   function getActiveSection() {
     let active = 0;
@@ -162,13 +169,112 @@ const SubController = (function() {
   function setTarget(secIdx) {
     const t = targets[secIdx] || targets[0];
     const sw = subCvs.width, sh = subCvs.height;
+
     tgtX = t.xr * (window.innerWidth - sw);
     tgtY = t.yr * (window.innerHeight - sh);
 
+    const isInsp = sectionIds[secIdx] === 'inspiration';
     const shouldFlip = t.xr > .5;
-    if (shouldFlip !== flipped) {
-      flipped = shouldFlip;
-      subCvs.style.transform = flipped ? 'scaleX(-1)' : 'scaleX(1)';
+
+    // Submarine orientation is locked by GSAP during sequence
+    if (!isInsp || inspiState === 0 || inspiState >= 3) {
+      if (shouldFlip !== flipped) {
+        flipped = shouldFlip;
+        subCvs.style.transform = flipped ? 'scaleX(-1)' : 'scaleX(1)';
+        wrap.setAttribute('data-dir', flipped ? 'right' : 'left');
+      }
+    }
+
+    // Default cable visibility (hidden unless pulling)
+    const cable = document.getElementById('sub-cable');
+    if (cable && !isInsp) {
+      gsap.to(cable, { opacity: 0, duration: 0.5 });
+    }
+
+    // Init GSAP Cutscene
+    if (isInsp && inspiState === 0) {
+      if (typeof gsap === 'undefined') return; // wait for library
+
+      inspiState = 1;
+      wrap.style.transition = 'none'; // Prevent CSS from adding lag
+      const frame = document.getElementById('subnautica-frame');
+      const targetRestX = t.xr * (window.innerWidth - sw);
+
+      // Setup initial state: make frame start offscreen to the right
+      const frameStartDist = window.innerWidth + 100;
+      gsap.set(frame, { x: frameStartDist });
+
+      animProxy.tgtX = curX; // Start where it physically is to avoid jumps
+
+      const tl = gsap.timeline({
+        onComplete: () => {
+          inspiState = 3;
+          wrap.style.transition = ''; // Restore CSS transition
+        }
+      });
+
+      // 1. Move submarine offscreen right (behind the frame)
+      const frameRect = frame.getBoundingClientRect();
+      const frameWidth = frame.offsetWidth;
+      // frame is at frameStartDist. Calculate where its right edge is.
+      // Since frame is offscreen, we must use its target/start position for sub.
+      const currentX = gsap.getProperty(frame, "x");
+      const baseRectLeft = frameRect.left - currentX;
+
+      const subPushStartX = baseRectLeft + frameStartDist + frameWidth + 100;
+
+      tl.add(() => {
+        flipped = true;
+        subCvs.style.transform = 'scaleX(-1)';
+        wrap.setAttribute('data-dir', 'right');
+      });
+      tl.to(animProxy, {
+        tgtX: subPushStartX,
+        duration: 1.2,
+        ease: "power2.in" // accelerate to get there
+      });
+
+      // 2. Position exactly at the edge BEFORE starting image move
+      tl.add(() => {
+        inspiState = 2;
+        flipped = false;
+        subCvs.style.transform = 'scaleX(1)';
+        wrap.setAttribute('data-dir', 'left');
+        // snap sub to the frame edge offscreen
+        animProxy.tgtX = baseRectLeft + frameStartDist + frameWidth - 12;
+      }, "+=0.1");
+
+      // 3. Now start the joint movement
+      tl.to(frame, {
+        x: 0,
+        duration: 3.5,
+        ease: "power2.inOut",
+        onUpdate: function () {
+          const fx = gsap.getProperty(frame, "x");
+          animProxy.tgtX = baseRectLeft + fx + frameWidth - 12;
+        }
+      }, "+=0.1"); // slight pause for "impact" feel
+
+      tl.to(animProxy, {
+        tgtRot: -12, // Tilt during push
+        duration: 0.8,
+        ease: "power1.inOut"
+      }, "<");
+
+      // 4. Unlock & Move to rest spot
+      tl.to(animProxy, {
+        tgtX: targetRestX,
+        tgtRot: 0,
+        duration: 2,
+        ease: "power2.inOut"
+      }, "+=0.3");
+
+      // 5. Turn around
+      tl.add(() => {
+        flipped = true;
+        subCvs.style.transform = 'scaleX(-1)';
+        wrap.setAttribute('data-dir', 'right');
+      }, "+=0.2");
     }
   }
 
@@ -192,15 +298,15 @@ const SubController = (function() {
     ];
     const flicker = Math.sin(animT * 0.35) * 0.4 + 0.6;
     const p = {
-      A:'#525870', B:'#8a8da8', C:'#363852',
-      D:'#70728a',
-      E: `rgba(${200 + Math.round(flicker*55)},${70 + Math.round(flicker*30)},10,1)`,
-      F:'#182338', G:'#00c8ff',
-      H: `rgba(255,${150+Math.round(flicker*50)},0,0.9)`,
-      I: `rgba(255,${80+Math.round(flicker*40)},0,0.9)`,
+      A: '#525870', B: '#8a8da8', C: '#363852',
+      D: '#70728a',
+      E: `rgba(${200 + Math.round(flicker * 55)},${70 + Math.round(flicker * 30)},10,1)`,
+      F: '#182338', G: '#00c8ff',
+      H: `rgba(255,${150 + Math.round(flicker * 50)},0,0.9)`,
+      I: `rgba(255,${80 + Math.round(flicker * 40)},0,0.9)`,
       J: `rgba(255,30,0,0.8)`,
     };
-    subCvs.width  = art[0].length * scale;
+    subCvs.width = art[0].length * scale;
     subCvs.height = art.length * scale;
     const ctx = subCvs.getContext('2d');
     ctx.imageSmoothingEnabled = false;
@@ -214,8 +320,8 @@ const SubController = (function() {
     });
 
     // Porthole window glow
-    const pgrd = ctx.createRadialGradient(16*scale, 6.5*scale, 0, 16*scale, 6.5*scale, 2.5*scale);
-    pgrd.addColorStop(0, `rgba(0,200,255,${0.5 + Math.sin(animT*.2)*.15})`);
+    const pgrd = ctx.createRadialGradient(16 * scale, 6.5 * scale, 0, 16 * scale, 6.5 * scale, 2.5 * scale);
+    pgrd.addColorStop(0, `rgba(0,200,255,${0.5 + Math.sin(animT * .2) * .15})`);
     pgrd.addColorStop(1, 'transparent');
     ctx.fillStyle = pgrd;
     ctx.fillRect(0, 0, subCvs.width, subCvs.height);
@@ -225,8 +331,17 @@ const SubController = (function() {
 
   function tick() {
     animT += 0.6;
-    // Smooth movement
-    curX = lerp(curX, tgtX, .032);
+
+    // Inspiration Animation Logic (GSAP controlled)
+    let runTgtX = tgtX;
+    if (inspiState === 1 || inspiState === 2) {
+      // Direct assignment bypasses lerp delay, perfectly syncing with GSAP frame pull
+      curX = animProxy.tgtX;
+    } else {
+      // Smooth normal movement
+      curX = lerp(curX, runTgtX, .032);
+    }
+
     curY = lerp(curY, tgtY, .028);
 
     // Bob
@@ -234,17 +349,20 @@ const SubController = (function() {
     const wobble = Math.sin(animT * .03) * 1.5;
 
     wrap.style.left = Math.round(curX) + 'px';
-    wrap.style.top  = Math.round(curY + bob) + 'px';
-    wrap.style.transform = `rotate(${wobble}deg)`;
+    wrap.style.top = Math.round(curY + bob) + 'px';
+
+    // Combine wobble with custom GSAP rotation
+    const finalRot = wobble + (animProxy.tgtRot || 0);
+    wrap.style.transform = `rotate(${finalRot}deg)`;
 
     // Update glow opacity based on depth
     glow.style.opacity = Math.max(.3, 1 - depth * .7);
 
     // Deepen filter
     if (depth > .6) {
-      wrap.style.filter = `drop-shadow(0 0 10px rgba(140,80,255,${(depth-.6)*1.5})) saturate(${1-depth*.4})`;
+      wrap.style.filter = `drop-shadow(0 0 10px rgba(140,80,255,${(depth - .6) * 1.5})) saturate(${1 - depth * .4})`;
     } else {
-      wrap.style.filter = `drop-shadow(0 0 ${12 + Math.sin(animT*.015)*4}px rgba(0,200,255,${.5+Math.sin(animT*.02)*.2}))`;
+      wrap.style.filter = `drop-shadow(0 0 ${12 + Math.sin(animT * .015) * 4}px rgba(0,200,255,${.5 + Math.sin(animT * .02) * .2}))`;
     }
 
     // Feed ocean the sub center position
@@ -263,9 +381,9 @@ const SubController = (function() {
 
     // depth fill
     const fill = document.getElementById('depth-progress');
-    const num  = document.getElementById('depth-num');
+    const num = document.getElementById('depth-num');
     if (fill) fill.style.height = (depth * 100) + '%';
-    if (num)  num.textContent = Math.round(depth * 5000) + 'm';
+    if (num) num.textContent = Math.round(depth * 5000) + 'm';
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });

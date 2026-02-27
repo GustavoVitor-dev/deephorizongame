@@ -340,19 +340,43 @@ button:hover~#cursor {
 #sub-canvas {
   image-rendering: pixelated;
   display: block;
+  position: relative;
+  z-index: 2;
 }
 
 #sub-glow {
   position: absolute;
-  pointer-events: none;
-  width: 380px;
-  height: 140px;
   top: 50%;
-  left: 100%;
+  width: 700px;
+  height: 350px;
   transform: translateY(-50%);
-  background: radial-gradient(ellipse 190px 70px at 30% 50%,
-      rgba(0, 200, 255, .13) 0%, rgba(0, 200, 255, .04) 55%, transparent 100%);
-  transition: opacity .5s;
+  z-index: 3;
+  /* On top of sub-canvas */
+  pointer-events: none;
+  mix-blend-mode: screen;
+  filter: blur(22px);
+  /* High blur for dispersion */
+  /* Locked: removed transition for 'left' to avoid lag during flip */
+  transition: opacity 0.5s;
+  opacity: 0.65;
+}
+
+#sub-wrap[data-dir="right"] #sub-glow {
+  left: 105px;
+  /* Precision alignment + forward push */
+  background: radial-gradient(ellipse 680px 160px at 0% 50%,
+      rgba(0, 200, 255, 0.35) 0%,
+      rgba(0, 150, 255, 0.08) 40%,
+      transparent 80%);
+}
+
+#sub-wrap[data-dir="left"] #sub-glow {
+  left: -705px;
+  /* 25 nose - 700 width - 30 margin */
+  background: radial-gradient(ellipse 680px 160px at 100% 50%,
+      rgba(0, 200, 255, 0.35) 0%,
+      rgba(0, 150, 255, 0.08) 40%,
+      transparent 80%);
 }
 
 /* ─── SCANLINES ─── */
@@ -1295,6 +1319,117 @@ section {
 }
 
 /* ─── FOOTER ─── */
+#inspiration {
+  background: linear-gradient(180deg, #010306 0%, #000c1d 50%, #010306 100%);
+}
+
+#sub-cable {
+  position: absolute;
+  top: 50%;
+  width: 200vw;
+  height: 2px;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+#sub-wrap[data-dir="right"] #sub-cable {
+  right: 90px;
+  /* Tail is on left, stretching left */
+  left: auto;
+  background: linear-gradient(-90deg, rgba(0, 200, 255, 0.6), transparent 30%);
+  transform: translateY(-50%) rotate(1deg);
+  transform-origin: right center;
+}
+
+#sub-wrap[data-dir="left"] #sub-cable {
+  left: 90px;
+  /* Tail is on right, stretching right */
+  right: auto;
+  background: linear-gradient(90deg, rgba(0, 200, 255, 0.6), transparent 30%);
+  transform: translateY(-50%) rotate(-1deg);
+  transform-origin: left center;
+}
+
+.inspiration-container {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 50px;
+  align-items: center;
+  max-width: 1100px;
+  margin-top: 40px;
+}
+
+@media(max-width: 850px) {
+  .inspiration-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+#subnautica-frame {
+  position: relative;
+  border: 1px solid rgba(0, 200, 255, 0.2);
+  padding: 10px;
+  background: rgba(0, 10, 20, 0.5);
+  box-shadow: 0 0 40px rgba(0, 150, 255, 0.15);
+  overflow: hidden;
+}
+
+#subnautica-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(0, 200, 255, 0.4);
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: inset 0 0 20px rgba(0, 200, 255, 0.2);
+}
+
+#subnautica-img {
+  width: 100%;
+  display: block;
+  filter: saturate(1.2) contrast(1.1);
+  transition: transform 0.5s ease;
+}
+
+#subnautica-frame:hover #subnautica-img {
+  transform: scale(1.05);
+}
+
+.inspiration-text {
+  font-family: 'Exo 2', sans-serif;
+}
+
+.inspiration-text p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--white-dim);
+  margin-bottom: 20px;
+}
+
+.frame-glitch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(transparent, rgba(0, 200, 255, 0.05), transparent);
+  z-index: 1;
+  pointer-events: none;
+  animation: frameScan 4s linear infinite;
+}
+
+@keyframes frameScan {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(100%);
+  }
+}
+
 footer {
   background: #000204;
   padding: 36px 64px;

@@ -123,7 +123,7 @@ function spawnBubbles(containerId, count) {
 }
 
 ['bubbles-hero', 'bubbles-lore', 'bubbles-gameplay', 'bubbles-weapons',
-  'bubbles-monsters', 'bubbles-element', 'bubbles-wreck'].forEach(id => spawnBubbles(id, 18));
+  'bubbles-monsters', 'bubbles-element', 'bubbles-wreck', 'bubbles-inspiration'].forEach(id => spawnBubbles(id, 18));
 
 
 /* ── Element Particles (green glow drifters) ── */

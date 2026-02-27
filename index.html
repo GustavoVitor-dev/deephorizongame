@@ -1,677 +1,843 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DEEP HORIZON — E-Horizon Studio</title>
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEEP HORIZON — E-Horizon Studio</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<!-- ── CURSOR ── -->
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
+  <!-- ── CURSOR ── -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
 
-<!-- ── OCEAN BACKGROUND ── -->
-<canvas id="ocean-bg"></canvas>
+  <!-- ── OCEAN BACKGROUND ── -->
+  <canvas id="ocean-bg"></canvas>
 
-<!-- ── SCANLINES ── -->
-<div id="scanlines"></div>
+  <!-- ── SCANLINES ── -->
+  <div id="scanlines"></div>
 
-<!-- ── SUBMARINE ── -->
-<div id="sub-wrap">
-  <canvas id="sub-canvas"></canvas>
-  <div id="sub-glow"></div>
-</div>
-
-<!-- ── HUD ── -->
-<div id="hud">
-  <div class="hud-row">
-    <span class="hud-label">OXIGÊNIO</span>
-    <div id="o2-track"><div id="o2-bar"></div></div>
+  <!-- ── SUBMARINE ── -->
+  <div id="sub-wrap">
+    <div id="sub-cable"></div>
+    <canvas id="sub-canvas"></canvas>
+    <div id="sub-glow"></div>
   </div>
-  <div class="hud-row">
-    <span class="hud-label">VIDA</span>
-    <div class="hearts">
-      <span class="heart">♥</span>
-      <span class="heart">♥</span>
-      <span class="heart">♥</span>
+
+  <!-- ── HUD ── -->
+  <div id="hud">
+    <div class="hud-row">
+      <span class="hud-label">OXIGÊNIO</span>
+      <div id="o2-track">
+        <div id="o2-bar"></div>
+      </div>
+    </div>
+    <div class="hud-row">
+      <span class="hud-label">VIDA</span>
+      <div class="hearts">
+        <span class="heart">♥</span>
+        <span class="heart">♥</span>
+        <span class="heart">♥</span>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- ── DEPTH SIDEBAR ── -->
-<div id="depth-sidebar">
-  <span id="depth-label" style="font-size:8px;letter-spacing:.15em;color:var(--grey);font-family:'Share Tech Mono',monospace">PROF.</span>
-  <div id="depth-track">
-    <div id="depth-progress"></div>
+  <!-- ── DEPTH SIDEBAR ── -->
+  <div id="depth-sidebar">
+    <span id="depth-label"
+      style="font-size:8px;letter-spacing:.15em;color:var(--grey);font-family:'Share Tech Mono',monospace">PROF.</span>
+    <div id="depth-track">
+      <div id="depth-progress"></div>
+    </div>
+    <span id="depth-num"
+      style="font-size:9px;color:var(--teal);font-family:'Share Tech Mono',monospace;letter-spacing:.1em;writing-mode:vertical-lr;transform:rotate(180deg)">0m</span>
   </div>
-  <span id="depth-num" style="font-size:9px;color:var(--teal);font-family:'Share Tech Mono',monospace;letter-spacing:.1em;writing-mode:vertical-lr;transform:rotate(180deg)">0m</span>
-</div>
 
-<!-- ── NAV ── -->
-<nav id="nav">
-  <a href="#hero" class="nav-brand">DEEP <span>HORIZON</span></a>
-  <ul class="nav-links">
-    <li><a href="#hero">Início</a></li>
-    <li><a href="#lore">Lore</a></li>
-    <li><a href="#gameplay">Gameplay</a></li>
-    <li><a href="#monsters">Inimigos</a></li>
-    <li><a href="#wreck">Naufrágio</a></li>
-    <li><a href="#team">Equipe</a></li>
-  </ul>
-  <span class="nav-depth" id="nav-depth">▼ 0m</span>
-</nav>
+  <!-- ── NAV ── -->
+  <nav id="nav">
+    <a href="#hero" class="nav-brand">DEEP <span>HORIZON</span></a>
+    <ul class="nav-links">
+      <li><a href="#hero">Início</a></li>
+      <li><a href="#lore">Lore</a></li>
+      <li><a href="#gameplay">Gameplay</a></li>
+      <li><a href="#monsters">Inimigos</a></li>
+      <li><a href="#wreck">Naufrágio</a></li>
+      <li><a href="#inspiration">Inspiração</a></li>
+      <li><a href="#team">Equipe</a></li>
+    </ul>
+    <span class="nav-depth" id="nav-depth">▼ 0m</span>
+  </nav>
 
-<main>
+  <main>
 
-<!-- ══════════════════════════════════════════
+    <!-- ══════════════════════════════════════════
      HERO — SUPERFÍCIE
 ══════════════════════════════════════════ -->
-<section id="hero">
-  <div class="bubbles" id="bubbles-hero"></div>
+    <section id="hero">
+      <div class="bubbles" id="bubbles-hero"></div>
 
-  <!-- Sonar rings -->
-  <div class="sonar-rings">
-    <div class="sonar-ring"></div>
-    <div class="sonar-ring"></div>
-    <div class="sonar-ring"></div>
-  </div>
+      <!-- Sonar rings -->
+      <div class="sonar-rings">
+        <div class="sonar-ring"></div>
+        <div class="sonar-ring"></div>
+        <div class="sonar-ring"></div>
+      </div>
 
-  <div class="sec-content" style="display:flex;flex-direction:column;align-items:center;text-align:center;">
-    <p class="hero-eyebrow reveal">E-HORIZON STUDIO PRESENTS</p>
-    <h1 class="hero-title reveal" style="transition-delay:.15s">DEEP<br>HORIZON</h1>
-    <p class="hero-sub reveal" style="transition-delay:.35s">
-      Um elemento desconhecido naufraga no Estreito de Drake e corrompe o abismo.<br>
-      Pilote o submarino. Colete os fragmentos. Sobreviva ao que a escuridão esconde.
-    </p>
-    <div class="hero-cta reveal" style="transition-delay:.55s">
-      <a href="#lore" class="btn btn-primary">MERGULHAR</a>
-      <a href="#gameplay" class="btn btn-ghost">VER GAMEPLAY</a>
-    </div>
-  </div>
+      <div class="sec-content" style="display:flex;flex-direction:column;align-items:center;text-align:center;">
+        <p class="hero-eyebrow reveal">E-HORIZON STUDIO PRESENTS</p>
+        <h1 class="hero-title reveal" style="transition-delay:.15s">DEEP<br>HORIZON</h1>
+        <p class="hero-sub reveal" style="transition-delay:.35s">
+          Um elemento desconhecido naufraga no Estreito de Drake e corrompe o abismo.<br>
+          Pilote o submarino. Colete os fragmentos. Sobreviva ao que a escuridão esconde.
+        </p>
+        <div class="hero-cta reveal" style="transition-delay:.55s">
+          <a href="#lore" class="btn btn-primary">MERGULHAR</a>
+          <a href="#gameplay" class="btn btn-ghost">VER GAMEPLAY</a>
+        </div>
+      </div>
 
-  <div class="scroll-down">
-    ROLE PARA DESCER
-    <div class="scroll-down-line"></div>
-  </div>
-</section>
+      <div class="scroll-down">
+        ROLE PARA DESCER
+        <div class="scroll-down-line"></div>
+      </div>
+    </section>
 
-<!-- ══════════════════════════════════════════
+    <!-- ══════════════════════════════════════════
      LORE — 200m  Zona Mesopelágica
 ══════════════════════════════════════════ -->
-<section id="lore">
-  <div class="bubbles" id="bubbles-lore"></div>
-  <div class="sec-content">
-    <span class="sec-tag reveal">// 01 — origem</span>
-    <span class="sec-depth reveal" style="transition-delay:.1s">▼ 200m · Zona Mesopelágica</span>
-    <h2 class="sec-title reveal" style="transition-delay:.2s">A ORIGEM DO <span class="accent">DESASTRE</span></h2>
-    <p class="sec-lead reveal" style="transition-delay:.3s">
-      Tudo começou com uma descoberta científica sem precedentes. Um novo elemento metálico com propriedades eletromagnéticas desconhecidas foi identificado. O que deveria ser um avanço para a humanidade tornou-se um catástrofe silenciosa.
-    </p>
+    <section id="lore">
+      <div class="bubbles" id="bubbles-lore"></div>
+      <div class="sec-content">
+        <span class="sec-tag reveal">// 01 — origem</span>
+        <span class="sec-depth reveal" style="transition-delay:.1s">▼ 200m · Zona Mesopelágica</span>
+        <h2 class="sec-title reveal" style="transition-delay:.2s">A ORIGEM DO <span class="accent">DESASTRE</span></h2>
+        <p class="sec-lead reveal" style="transition-delay:.3s">
+          Tudo começou com uma descoberta científica sem precedentes. Um novo elemento metálico com propriedades
+          eletromagnéticas desconhecidas foi identificado. O que deveria ser um avanço para a humanidade tornou-se um
+          catástrofe silenciosa.
+        </p>
 
-    <div class="lore-grid">
+        <div class="lore-grid">
 
-      <div class="lore-card reveal" style="transition-delay:.1s">
-        <span class="lore-num">01</span>
-        <canvas class="lore-icon" id="lore-icon-1" width="48" height="48"></canvas>
-        <div class="lore-title">A DESCOBERTA</div>
-        <p>Cientistas identificam um novo elemento metálico com assinatura eletromagnética singular. O governo autoriza transporte urgente via navio cargueiro pelo Estreito de Drake, a rota mais isolada do mundo.</p>
+          <div class="lore-card reveal" style="transition-delay:.1s">
+            <span class="lore-num">01</span>
+            <canvas class="lore-icon" id="lore-icon-1" width="48" height="48"></canvas>
+            <div class="lore-title">A DESCOBERTA</div>
+            <p>Cientistas identificam um novo elemento metálico com assinatura eletromagnética singular. O governo
+              autoriza transporte urgente via navio cargueiro pelo Estreito de Drake, a rota mais isolada do mundo.</p>
+          </div>
+
+          <div class="lore-card reveal" style="transition-delay:.2s">
+            <span class="lore-num">02</span>
+            <canvas class="lore-icon" id="lore-icon-2" width="48" height="48"></canvas>
+            <div class="lore-title">O NAUFRÁGIO</div>
+            <p>Uma tempestade de origem desconhecida engole o cargueiro em questão de minutos. Toneladas do elemento são
+              despejadas no oceano. A região começa a mudar de forma imperceptível — e irreversível.</p>
+          </div>
+
+          <div class="lore-card reveal" style="transition-delay:.3s">
+            <span class="lore-num">03</span>
+            <canvas class="lore-icon" id="lore-icon-3" width="48" height="48"></canvas>
+            <div class="lore-title">A ANOMALIA</div>
+            <p>Meses depois, um satélite militar capta uma assinatura eletromagnética anômala exatamente no ponto do
+              naufrágio. A região é imediatamente classificada como restrita. O pânico, por ora, é silencioso.</p>
+          </div>
+
+          <div class="lore-card reveal" style="transition-delay:.4s">
+            <span class="lore-num">04</span>
+            <canvas class="lore-icon" id="lore-icon-4" width="48" height="48"></canvas>
+            <div class="lore-title">A REFINARIA</div>
+            <p>Uma estação de refinamento é construída próxima à área de impacto, com containers especiais
+              anti-radiação. Um submarino é enviado para coletar os fragmentos. Ao mergulhar, a missão torna-se muito
+              mais do que previsto.</p>
+          </div>
+
+        </div>
       </div>
+    </section>
 
-      <div class="lore-card reveal" style="transition-delay:.2s">
-        <span class="lore-num">02</span>
-        <canvas class="lore-icon" id="lore-icon-2" width="48" height="48"></canvas>
-        <div class="lore-title">O NAUFRÁGIO</div>
-        <p>Uma tempestade de origem desconhecida engole o cargueiro em questão de minutos. Toneladas do elemento são despejadas no oceano. A região começa a mudar de forma imperceptível — e irreversível.</p>
-      </div>
-
-      <div class="lore-card reveal" style="transition-delay:.3s">
-        <span class="lore-num">03</span>
-        <canvas class="lore-icon" id="lore-icon-3" width="48" height="48"></canvas>
-        <div class="lore-title">A ANOMALIA</div>
-        <p>Meses depois, um satélite militar capta uma assinatura eletromagnética anômala exatamente no ponto do naufrágio. A região é imediatamente classificada como restrita. O pânico, por ora, é silencioso.</p>
-      </div>
-
-      <div class="lore-card reveal" style="transition-delay:.4s">
-        <span class="lore-num">04</span>
-        <canvas class="lore-icon" id="lore-icon-4" width="48" height="48"></canvas>
-        <div class="lore-title">A REFINARIA</div>
-        <p>Uma estação de refinamento é construída próxima à área de impacto, com containers especiais anti-radiação. Um submarino é enviado para coletar os fragmentos. Ao mergulhar, a missão torna-se muito mais do que previsto.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
+    <!-- ══════════════════════════════════════════
      GAMEPLAY — 800m  Zona Batipelágica
 ══════════════════════════════════════════ -->
-<section id="gameplay">
-  <div class="bubbles" id="bubbles-gameplay"></div>
-  <div class="sec-content">
-    <span class="sec-tag reveal">// 02 — mecânicas</span>
-    <span class="sec-depth reveal" style="transition-delay:.1s">▼ 800m · Zona Batipelágica</span>
-    <h2 class="sec-title reveal" style="transition-delay:.2s">COMO <span class="accent-teal">JOGAR</span></h2>
+    <section id="gameplay">
+      <div class="bubbles" id="bubbles-gameplay"></div>
+      <div class="sec-content">
+        <span class="sec-tag reveal">// 02 — mecânicas</span>
+        <span class="sec-depth reveal" style="transition-delay:.1s">▼ 800m · Zona Batipelágica</span>
+        <h2 class="sec-title reveal" style="transition-delay:.2s">COMO <span class="accent-teal">JOGAR</span></h2>
 
-    <!-- Map Preview + Intro -->
-    <div class="gameplay-intro reveal" style="transition-delay:.3s">
-      <div>
-        <p class="sec-lead" style="margin-bottom:24px">
-          Deep Horizon é um jogo <strong style="color:var(--cyan)">2D side-scroller</strong> com mecânica de profundidade progressiva. Cada nível é um mergulho mais fundo — e mais perigoso.
+        <!-- Map Preview + Intro -->
+        <div class="gameplay-intro reveal" style="transition-delay:.3s">
+          <div>
+            <p class="sec-lead" style="margin-bottom:24px">
+              Deep Horizon é um jogo <strong style="color:var(--cyan)">2D side-scroller</strong> com mecânica de
+              profundidade progressiva. Cada nível é um mergulho mais fundo — e mais perigoso.
+            </p>
+            <p style="font-size:13.5px;line-height:1.85;color:var(--white-dim);font-weight:200;margin-bottom:20px">
+              O mapa se expande <em style="color:var(--teal)">lateralmente e verticalmente</em>. Quanto mais o jogador
+              desce, mais escuro o ambiente, mais raros as bolhas de oxigênio e mais agressivos os mutantes. A lanterna
+              do submarino é o único aliado contra a escuridão absoluta.
+            </p>
+            <p style="font-size:13.5px;line-height:1.85;color:var(--white-dim);font-weight:200">
+              Ao atingir a <em style="color:var(--cyan)">cota mínima de fragmentos</em> exigida, o jogador deve retornar
+              ao ponto de extração da refinaria antes que o oxigênio acabe — ou que os monstros o alcancem.
+            </p>
+          </div>
+          <div class="gameplay-screen">
+            <span class="screen-label">// MAPA PREVIEW — MISSÃO 01</span>
+            <canvas id="map-canvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Mechanics cards -->
+        <h3 class="sec-title reveal" style="font-size:22px;margin-bottom:24px;transition-delay:.1s">MECÂNICAS <span
+            class="accent-teal">PRINCIPAIS</span></h3>
+        <div class="mech-grid">
+
+          <div class="mech-card reveal" style="transition-delay:.1s">
+            <canvas class="mech-icon" id="mech-explore" width="64" height="72"></canvas>
+            <div class="mech-text">
+              <h3>EXPLORAÇÃO COM LANTERNA</h3>
+              <p>O ambiente abissal é completamente escuro. A lanterna do submarino projeta um cone de visão limitado.
+                Navegar pelas cavernas e destroços exige atenção total — o que está fora do cone permanece invisível.
+              </p>
+            </div>
+          </div>
+
+          <div class="mech-card reveal" style="transition-delay:.2s">
+            <canvas class="mech-icon" id="mech-collect" width="64" height="72"></canvas>
+            <div class="mech-text">
+              <h3>COLETA DE FRAGMENTOS</h3>
+              <p>Os fragmentos do elemento estão espalhados pelo mapa — alguns à vista, outros escondidos em fendas e
+                cavernas. Cada missão define uma cota mínima que precisa ser atingida para que a fase seja concluída.
+              </p>
+            </div>
+          </div>
+
+          <div class="mech-card reveal" style="transition-delay:.3s">
+            <canvas class="mech-icon" id="mech-oxygen" width="64" height="72"></canvas>
+            <div class="mech-text">
+              <h3>GESTÃO DE OXIGÊNIO</h3>
+              <p>O O₂ é consumido continuamente. Bolhas aparecem esporadicamente pelo mapa e repõem alguns segundos de
+                suprimento. Quanto mais fundo, menos bolhas aparecem. Cada segundo desperdiçado pode ser fatal.</p>
+            </div>
+          </div>
+
+          <div class="mech-card reveal" style="transition-delay:.4s">
+            <canvas class="mech-icon" id="mech-extract" width="64" height="72"></canvas>
+            <div class="mech-text">
+              <h3>PONTO DE EXTRAÇÃO</h3>
+              <p>O objetivo final de cada missão é retornar ao ponto de extração da refinaria e depositar os fragmentos
+                coletados na canaleta especial. Quanto mais cheio o depósito, maior a pontuação da missão.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Lose conditions -->
+        <h3 class="sec-title reveal" style="font-size:20px;margin-top:60px;margin-bottom:8px;transition-delay:.1s">
+          CONDIÇÕES DE <span class="accent-red">DERROTA</span></h3>
+        <p class="reveal"
+          style="font-size:13px;color:rgba(200,150,150,.55);margin-bottom:28px;font-family:'Share Tech Mono',monospace;letter-spacing:.1em;transition-delay:.2s">
+          EXISTEM 3 MANEIRAS DE FALHAR — E TODAS SÃO FATAIS.
         </p>
-        <p style="font-size:13.5px;line-height:1.85;color:var(--white-dim);font-weight:200;margin-bottom:20px">
-          O mapa se expande <em style="color:var(--teal)">lateralmente e verticalmente</em>. Quanto mais o jogador desce, mais escuro o ambiente, mais raros as bolhas de oxigênio e mais agressivos os mutantes. A lanterna do submarino é o único aliado contra a escuridão absoluta.
-        </p>
-        <p style="font-size:13.5px;line-height:1.85;color:var(--white-dim);font-weight:200">
-          Ao atingir a <em style="color:var(--cyan)">cota mínima de fragmentos</em> exigida, o jogador deve retornar ao ponto de extração da refinaria antes que o oxigênio acabe — ou que os monstros o alcancem.
-        </p>
-      </div>
-      <div class="gameplay-screen">
-        <span class="screen-label">// MAPA PREVIEW — MISSÃO 01</span>
-        <canvas id="map-canvas"></canvas>
-      </div>
-    </div>
-
-    <!-- Mechanics cards -->
-    <h3 class="sec-title reveal" style="font-size:22px;margin-bottom:24px;transition-delay:.1s">MECÂNICAS <span class="accent-teal">PRINCIPAIS</span></h3>
-    <div class="mech-grid">
-
-      <div class="mech-card reveal" style="transition-delay:.1s">
-        <canvas class="mech-icon" id="mech-explore" width="64" height="72"></canvas>
-        <div class="mech-text">
-          <h3>EXPLORAÇÃO COM LANTERNA</h3>
-          <p>O ambiente abissal é completamente escuro. A lanterna do submarino projeta um cone de visão limitado. Navegar pelas cavernas e destroços exige atenção total — o que está fora do cone permanece invisível.</p>
+        <div class="lose-row">
+          <div class="lose-card reveal" style="transition-delay:.2s">
+            <canvas id="lose-o2" width="70" height="60"></canvas>
+            <h4>OXIGÊNIO ESGOTADO</h4>
+            <p>O indicador de O₂ chega a zero. O piloto não sobrevive à pressão abissal sem suprimento de ar.</p>
+          </div>
+          <div class="lose-card reveal" style="transition-delay:.3s">
+            <canvas id="lose-monster" width="70" height="60"></canvas>
+            <h4>ELIMINADO POR MUTANTE</h4>
+            <p>Os 3 corações de vida se esgotam ao ser atacado por criaturas mutadas pelo elemento.</p>
+          </div>
+          <div class="lose-card reveal" style="transition-delay:.4s">
+            <canvas id="lose-quota" width="70" height="60"></canvas>
+            <h4>COTA NÃO ATINGIDA</h4>
+            <p>O submarino retorna à refinaria com menos fragmentos do que o mínimo exigido pela missão.</p>
+          </div>
         </div>
       </div>
+    </section>
 
-      <div class="mech-card reveal" style="transition-delay:.2s">
-        <canvas class="mech-icon" id="mech-collect" width="64" height="72"></canvas>
-        <div class="mech-text">
-          <h3>COLETA DE FRAGMENTOS</h3>
-          <p>Os fragmentos do elemento estão espalhados pelo mapa — alguns à vista, outros escondidos em fendas e cavernas. Cada missão define uma cota mínima que precisa ser atingida para que a fase seja concluída.</p>
-        </div>
-      </div>
-
-      <div class="mech-card reveal" style="transition-delay:.3s">
-        <canvas class="mech-icon" id="mech-oxygen" width="64" height="72"></canvas>
-        <div class="mech-text">
-          <h3>GESTÃO DE OXIGÊNIO</h3>
-          <p>O O₂ é consumido continuamente. Bolhas aparecem esporadicamente pelo mapa e repõem alguns segundos de suprimento. Quanto mais fundo, menos bolhas aparecem. Cada segundo desperdiçado pode ser fatal.</p>
-        </div>
-      </div>
-
-      <div class="mech-card reveal" style="transition-delay:.4s">
-        <canvas class="mech-icon" id="mech-extract" width="64" height="72"></canvas>
-        <div class="mech-text">
-          <h3>PONTO DE EXTRAÇÃO</h3>
-          <p>O objetivo final de cada missão é retornar ao ponto de extração da refinaria e depositar os fragmentos coletados na canaleta especial. Quanto mais cheio o depósito, maior a pontuação da missão.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Lose conditions -->
-    <h3 class="sec-title reveal" style="font-size:20px;margin-top:60px;margin-bottom:8px;transition-delay:.1s">CONDIÇÕES DE <span class="accent-red">DERROTA</span></h3>
-    <p class="reveal" style="font-size:13px;color:rgba(200,150,150,.55);margin-bottom:28px;font-family:'Share Tech Mono',monospace;letter-spacing:.1em;transition-delay:.2s">
-      EXISTEM 3 MANEIRAS DE FALHAR — E TODAS SÃO FATAIS.
-    </p>
-    <div class="lose-row">
-      <div class="lose-card reveal" style="transition-delay:.2s">
-        <canvas id="lose-o2" width="70" height="60"></canvas>
-        <h4>OXIGÊNIO ESGOTADO</h4>
-        <p>O indicador de O₂ chega a zero. O piloto não sobrevive à pressão abissal sem suprimento de ar.</p>
-      </div>
-      <div class="lose-card reveal" style="transition-delay:.3s">
-        <canvas id="lose-monster" width="70" height="60"></canvas>
-        <h4>ELIMINADO POR MUTANTE</h4>
-        <p>Os 3 corações de vida se esgotam ao ser atacado por criaturas mutadas pelo elemento.</p>
-      </div>
-      <div class="lose-card reveal" style="transition-delay:.4s">
-        <canvas id="lose-quota" width="70" height="60"></canvas>
-        <h4>COTA NÃO ATINGIDA</h4>
-        <p>O submarino retorna à refinaria com menos fragmentos do que o mínimo exigido pela missão.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
+    <!-- ══════════════════════════════════════════
      WEAPONS — 1200m
 ══════════════════════════════════════════ -->
-<section id="weapons">
-  <div class="bubbles" id="bubbles-weapons"></div>
-  <div class="sec-content">
-    <span class="sec-tag reveal">// 03 — armamento</span>
-    <span class="sec-depth reveal" style="transition-delay:.1s">▼ 1200m · Zona Mesoabissal</span>
-    <h2 class="sec-title reveal" style="transition-delay:.2s">SISTEMA DE <span class="accent-teal">COMBATE</span></h2>
-    <p class="sec-lead reveal" style="transition-delay:.3s">
-      O submarino não foi projetado para o combate — mas a situação exigiu adaptações de emergência. O sistema de lâminas de água pressurizada foi improvisado pela equipe de engenharia antes do lançamento.
-    </p>
+    <section id="weapons">
+      <div class="bubbles" id="bubbles-weapons"></div>
+      <div class="sec-content">
+        <span class="sec-tag reveal">// 03 — armamento</span>
+        <span class="sec-depth reveal" style="transition-delay:.1s">▼ 1200m · Zona Mesoabissal</span>
+        <h2 class="sec-title reveal" style="transition-delay:.2s">SISTEMA DE <span class="accent-teal">COMBATE</span>
+        </h2>
+        <p class="sec-lead reveal" style="transition-delay:.3s">
+          O submarino não foi projetado para o combate — mas a situação exigiu adaptações de emergência. O sistema de
+          lâminas de água pressurizada foi improvisado pela equipe de engenharia antes do lançamento.
+        </p>
 
-    <div class="weapons-grid">
+        <div class="weapons-grid">
 
-      <div class="weapon-card reveal" style="transition-delay:.1s">
-        <canvas id="wpn-blade" width="100" height="48"></canvas>
-        <div class="weapon-name">LÂMINA DE PRESSÃO — Mk.I</div>
-        <p class="weapon-desc">Projétil de água pressurizada a alta velocidade. Ataque primário. Alcance médio, cadência alta. Eficaz contra formas de vida pequenas e médias.</p>
-        <div class="weapon-stats">
-          <div class="wstat"><span class="wstat-label">DANO</span><div class="wstat-bar"><div class="wstat-fill" style="width:55%"></div></div></div>
-          <div class="wstat"><span class="wstat-label">ALCANCE</span><div class="wstat-bar"><div class="wstat-fill" style="width:65%"></div></div></div>
-          <div class="wstat"><span class="wstat-label">CADÊNCIA</span><div class="wstat-bar"><div class="wstat-fill" style="width:80%"></div></div></div>
-          <div class="wstat"><span class="wstat-label">CONSUMO</span><div class="wstat-bar"><div class="wstat-fill" style="width:25%"></div></div></div>
+          <div class="weapon-card reveal" style="transition-delay:.1s">
+            <canvas id="wpn-blade" width="100" height="48"></canvas>
+            <div class="weapon-name">LÂMINA DE PRESSÃO — Mk.I</div>
+            <p class="weapon-desc">Projétil de água pressurizada a alta velocidade. Ataque primário. Alcance médio,
+              cadência alta. Eficaz contra formas de vida pequenas e médias.</p>
+            <div class="weapon-stats">
+              <div class="wstat"><span class="wstat-label">DANO</span>
+                <div class="wstat-bar">
+                  <div class="wstat-fill" style="width:55%"></div>
+                </div>
+              </div>
+              <div class="wstat"><span class="wstat-label">ALCANCE</span>
+                <div class="wstat-bar">
+                  <div class="wstat-fill" style="width:65%"></div>
+                </div>
+              </div>
+              <div class="wstat"><span class="wstat-label">CADÊNCIA</span>
+                <div class="wstat-bar">
+                  <div class="wstat-fill" style="width:80%"></div>
+                </div>
+              </div>
+              <div class="wstat"><span class="wstat-label">CONSUMO</span>
+                <div class="wstat-bar">
+                  <div class="wstat-fill" style="width:25%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="weapon-card reveal" style="transition-delay:.2s">
+            <canvas id="wpn-burst" width="100" height="48"></canvas>
+            <div class="weapon-name">RAJADA DIVERGENTE — Mk.II</div>
+            <p class="weapon-desc">Leque de três lâminas simultâneas. Cobertura angular de 45°. Ideal para criaturas que
+              atacam em cardumes ou para ambientes de espaço reduzido.</p>
+            <div class="weapon-stats">
+              <div class="wstat"><span class="wstat-label">DANO</span>
+                <div class="wstat-bar">
+                  <div class="wstat-fill" style="width:70%"></div>
+                </div>
+              </div>
+              <div class="wstat"><span class="wstat-label">ALCANCE</span>
+                <div class="wstat-bar">
+                  <div class="wstat-fill" style="width:40%"></div>
+                </div>
+              </div>
+              <div class="wstat"><span class="wstat-label">CADÊNCIA</span>
+                <div class="wstat-bar">
+                  <div class="wstat-fill" style="width:45%"></div>
+                </div>
+              </div>
+              <div class="wstat"><span class="wstat-label">CONSUMO</span>
+                <div class="wstat-bar">
+                  <div class="wstat-fill" style="width:60%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="weapon-card reveal" style="transition-delay:.3s">
+            <canvas id="wpn-pulse" width="100" height="48"></canvas>
+            <div class="weapon-name">PULSO SÔNICO — Mk.III</div>
+            <p class="weapon-desc">Onda de pressão omnidirecional. Alta energia. Atordoa criaturas ao redor por 2
+              segundos. Útil para sair de situações cercadas. Recarregamento lento.</p>
+            <div class="weapon-stats">
+              <div class="wstat"><span class="wstat-label">DANO</span>
+                <div class="wstat-bar">
+                  <div class="wstat-fill" style="width:85%"></div>
+                </div>
+              </div>
+              <div class="wstat"><span class="wstat-label">ALCANCE</span>
+                <div class="wstat-bar">
+                  <div class="wstat-fill" style="width:90%"></div>
+                </div>
+              </div>
+              <div class="wstat"><span class="wstat-label">CADÊNCIA</span>
+                <div class="wstat-bar">
+                  <div class="wstat-fill" style="width:18%"></div>
+                </div>
+              </div>
+              <div class="wstat"><span class="wstat-label">CONSUMO</span>
+                <div class="wstat-bar">
+                  <div class="wstat-fill" style="width:88%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
+    </section>
 
-      <div class="weapon-card reveal" style="transition-delay:.2s">
-        <canvas id="wpn-burst" width="100" height="48"></canvas>
-        <div class="weapon-name">RAJADA DIVERGENTE — Mk.II</div>
-        <p class="weapon-desc">Leque de três lâminas simultâneas. Cobertura angular de 45°. Ideal para criaturas que atacam em cardumes ou para ambientes de espaço reduzido.</p>
-        <div class="weapon-stats">
-          <div class="wstat"><span class="wstat-label">DANO</span><div class="wstat-bar"><div class="wstat-fill" style="width:70%"></div></div></div>
-          <div class="wstat"><span class="wstat-label">ALCANCE</span><div class="wstat-bar"><div class="wstat-fill" style="width:40%"></div></div></div>
-          <div class="wstat"><span class="wstat-label">CADÊNCIA</span><div class="wstat-bar"><div class="wstat-fill" style="width:45%"></div></div></div>
-          <div class="wstat"><span class="wstat-label">CONSUMO</span><div class="wstat-bar"><div class="wstat-fill" style="width:60%"></div></div></div>
-        </div>
-      </div>
-
-      <div class="weapon-card reveal" style="transition-delay:.3s">
-        <canvas id="wpn-pulse" width="100" height="48"></canvas>
-        <div class="weapon-name">PULSO SÔNICO — Mk.III</div>
-        <p class="weapon-desc">Onda de pressão omnidirecional. Alta energia. Atordoa criaturas ao redor por 2 segundos. Útil para sair de situações cercadas. Recarregamento lento.</p>
-        <div class="weapon-stats">
-          <div class="wstat"><span class="wstat-label">DANO</span><div class="wstat-bar"><div class="wstat-fill" style="width:85%"></div></div></div>
-          <div class="wstat"><span class="wstat-label">ALCANCE</span><div class="wstat-bar"><div class="wstat-fill" style="width:90%"></div></div></div>
-          <div class="wstat"><span class="wstat-label">CADÊNCIA</span><div class="wstat-bar"><div class="wstat-fill" style="width:18%"></div></div></div>
-          <div class="wstat"><span class="wstat-label">CONSUMO</span><div class="wstat-bar"><div class="wstat-fill" style="width:88%"></div></div></div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
+    <!-- ══════════════════════════════════════════
      MONSTERS — 2000m  Zona Abissal
 ══════════════════════════════════════════ -->
-<section id="monsters">
-  <div class="bubbles" id="bubbles-monsters"></div>
-  <div class="sec-content">
-    <span class="sec-tag reveal">// 04 — fauna mutada</span>
-    <span class="sec-depth reveal" style="transition-delay:.1s">▼ 2000m · Zona Abissal</span>
-    <h2 class="sec-title reveal" style="transition-delay:.2s">MUTANTES DO <span class="accent-green">ABISMO</span></h2>
-    <p class="sec-lead reveal" style="transition-delay:.3s">
-      A exposição ao elemento transformou cada criatura marinha da região. Organismos que antes jamais seriam ameaças tornaram-se predadores de topo. Eles não conhecem medo — e parecem atraídos pelo submarino.
-    </p>
+    <section id="monsters">
+      <div class="bubbles" id="bubbles-monsters"></div>
+      <div class="sec-content">
+        <span class="sec-tag reveal">// 04 — fauna mutada</span>
+        <span class="sec-depth reveal" style="transition-delay:.1s">▼ 2000m · Zona Abissal</span>
+        <h2 class="sec-title reveal" style="transition-delay:.2s">MUTANTES DO <span class="accent-green">ABISMO</span>
+        </h2>
+        <p class="sec-lead reveal" style="transition-delay:.3s">
+          A exposição ao elemento transformou cada criatura marinha da região. Organismos que antes jamais seriam
+          ameaças tornaram-se predadores de topo. Eles não conhecem medo — e parecem atraídos pelo submarino.
+        </p>
 
-    <div class="monster-grid">
+        <div class="monster-grid">
 
-      <div class="monster-card reveal" style="transition-delay:.1s">
-        <canvas id="mon-luminaris" width="96" height="72"></canvas>
-        <div class="monster-name">LUMINÁRIS</div>
-        <div class="monster-threat">NÍVEL DE AMEAÇA: ★★☆☆</div>
-        <p class="monster-desc">Peixe mutado com bioluminescência tóxica. Ataca em cardumes sincronizados. Individualmente fraco — em grupo, letal.</p>
-        <div class="monster-hp">
-          <div class="hp-block"></div><div class="hp-block"></div>
-          <div class="hp-block hp-empty"></div><div class="hp-block hp-empty"></div>
+          <div class="monster-card reveal" style="transition-delay:.1s">
+            <canvas id="mon-luminaris" width="96" height="72"></canvas>
+            <div class="monster-name">LUMINÁRIS</div>
+            <div class="monster-threat">NÍVEL DE AMEAÇA: ★★☆☆</div>
+            <p class="monster-desc">Peixe mutado com bioluminescência tóxica. Ataca em cardumes sincronizados.
+              Individualmente fraco — em grupo, letal.</p>
+            <div class="monster-hp">
+              <div class="hp-block"></div>
+              <div class="hp-block"></div>
+              <div class="hp-block hp-empty"></div>
+              <div class="hp-block hp-empty"></div>
+            </div>
+          </div>
+
+          <div class="monster-card reveal" style="transition-delay:.2s">
+            <canvas id="mon-nulmedusa" width="96" height="84"></canvas>
+            <div class="monster-name">NULMEDUSA</div>
+            <div class="monster-threat">NÍVEL DE AMEAÇA: ★★★☆</div>
+            <p class="monster-desc">Medusa gigante com tentáculos impregnados pelo elemento. Quase invisível na
+              escuridão. Paralisa o submarino com descarga elétrica.</p>
+            <div class="monster-hp">
+              <div class="hp-block"></div>
+              <div class="hp-block"></div>
+              <div class="hp-block"></div>
+              <div class="hp-block hp-empty"></div>
+            </div>
+          </div>
+
+          <div class="monster-card reveal" style="transition-delay:.3s">
+            <canvas id="mon-anglerfish" width="96" height="84"></canvas>
+            <div class="monster-name">ABISSAL-ANZOL</div>
+            <div class="monster-threat">NÍVEL DE AMEAÇA: ★★★★</div>
+            <p class="monster-desc">Peixe-lanterna mutado de tamanho colossal. Usa o fragmento do elemento como isca
+              luminosa. Detecta vibrações do motor a longas distâncias.</p>
+            <div class="monster-hp">
+              <div class="hp-block"></div>
+              <div class="hp-block"></div>
+              <div class="hp-block"></div>
+              <div class="hp-block"></div>
+            </div>
+          </div>
+
+          <div class="monster-card reveal" style="transition-delay:.4s">
+            <canvas id="mon-crab" width="96" height="84"></canvas>
+            <div class="monster-name">FERROCARANGUEIJO</div>
+            <div class="monster-threat">NÍVEL DE AMEAÇA: ★★★★</div>
+            <p class="monster-desc">Carangueijo com carapaça cristalizada pelo elemento. Quase imune às lâminas de
+              pressão. Bloqueia passagens e protege zonas de fragmentos.</p>
+            <div class="monster-hp">
+              <div class="hp-block"></div>
+              <div class="hp-block"></div>
+              <div class="hp-block"></div>
+              <div class="hp-block"></div>
+            </div>
+          </div>
+
+          <div class="monster-card reveal" style="transition-delay:.5s">
+            <canvas id="mon-serpent" width="110" height="60"></canvas>
+            <div class="monster-name">SERPENTE ABISSAL</div>
+            <div class="monster-threat">NÍVEL DE AMEAÇA: ★★★★</div>
+            <p class="monster-desc">Anguila colossal que percorre os corredores do naufrágio. Velocidade extrema. Pode
+              seguir o submarino por longos trechos sem perder o rastro.</p>
+            <div class="monster-hp">
+              <div class="hp-block"></div>
+              <div class="hp-block"></div>
+              <div class="hp-block"></div>
+              <div class="hp-block"></div>
+            </div>
+          </div>
+
         </div>
       </div>
+    </section>
 
-      <div class="monster-card reveal" style="transition-delay:.2s">
-        <canvas id="mon-nulmedusa" width="96" height="84"></canvas>
-        <div class="monster-name">NULMEDUSA</div>
-        <div class="monster-threat">NÍVEL DE AMEAÇA: ★★★☆</div>
-        <p class="monster-desc">Medusa gigante com tentáculos impregnados pelo elemento. Quase invisível na escuridão. Paralisa o submarino com descarga elétrica.</p>
-        <div class="monster-hp">
-          <div class="hp-block"></div><div class="hp-block"></div><div class="hp-block"></div>
-          <div class="hp-block hp-empty"></div>
-        </div>
-      </div>
-
-      <div class="monster-card reveal" style="transition-delay:.3s">
-        <canvas id="mon-anglerfish" width="96" height="84"></canvas>
-        <div class="monster-name">ABISSAL-ANZOL</div>
-        <div class="monster-threat">NÍVEL DE AMEAÇA: ★★★★</div>
-        <p class="monster-desc">Peixe-lanterna mutado de tamanho colossal. Usa o fragmento do elemento como isca luminosa. Detecta vibrações do motor a longas distâncias.</p>
-        <div class="monster-hp">
-          <div class="hp-block"></div><div class="hp-block"></div>
-          <div class="hp-block"></div><div class="hp-block"></div>
-        </div>
-      </div>
-
-      <div class="monster-card reveal" style="transition-delay:.4s">
-        <canvas id="mon-crab" width="96" height="84"></canvas>
-        <div class="monster-name">FERROCARANGUEIJO</div>
-        <div class="monster-threat">NÍVEL DE AMEAÇA: ★★★★</div>
-        <p class="monster-desc">Carangueijo com carapaça cristalizada pelo elemento. Quase imune às lâminas de pressão. Bloqueia passagens e protege zonas de fragmentos.</p>
-        <div class="monster-hp">
-          <div class="hp-block"></div><div class="hp-block"></div>
-          <div class="hp-block"></div><div class="hp-block"></div>
-        </div>
-      </div>
-
-      <div class="monster-card reveal" style="transition-delay:.5s">
-        <canvas id="mon-serpent" width="110" height="60"></canvas>
-        <div class="monster-name">SERPENTE ABISSAL</div>
-        <div class="monster-threat">NÍVEL DE AMEAÇA: ★★★★</div>
-        <p class="monster-desc">Anguila colossal que percorre os corredores do naufrágio. Velocidade extrema. Pode seguir o submarino por longos trechos sem perder o rastro.</p>
-        <div class="monster-hp">
-          <div class="hp-block"></div><div class="hp-block"></div>
-          <div class="hp-block"></div><div class="hp-block"></div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
+    <!-- ══════════════════════════════════════════
      ELEMENT — 3000m
 ══════════════════════════════════════════ -->
-<section id="element-sec">
-  <div class="bubbles" id="bubbles-element"></div>
-  <div class="particle-layer" id="element-particle-layer"></div>
-  <div class="sec-content">
-    <span class="sec-tag reveal">// 05 — elemento</span>
-    <span class="sec-depth reveal" style="transition-delay:.1s">▼ 3000m · Zona Ultraabissal</span>
-    <h2 class="sec-title reveal" style="transition-delay:.2s">O <span class="accent-green">ELEMENTO</span> DESCONHECIDO</h2>
+    <section id="element-sec">
+      <div class="bubbles" id="bubbles-element"></div>
+      <div class="particle-layer" id="element-particle-layer"></div>
+      <div class="sec-content">
+        <span class="sec-tag reveal">// 05 — elemento</span>
+        <span class="sec-depth reveal" style="transition-delay:.1s">▼ 3000m · Zona Ultraabissal</span>
+        <h2 class="sec-title reveal" style="transition-delay:.2s">O <span class="accent-green">ELEMENTO</span>
+          DESCONHECIDO</h2>
 
-    <div class="element-layout reveal" style="transition-delay:.3s">
-      <div class="element-visual">
-        <canvas id="el-big" width="144" height="132" class="glow-green float"></canvas>
-      </div>
-      <div class="element-info">
-        <h3>CLASSIFICAÇÃO: INDEFINIDA</h3>
-        <p class="element-subtitle">// ARQUIVO CLASSIFICADO — NÍVEL OMEGA //</p>
-        <p>O elemento exibe propriedades eletromagnéticas sem paralelo na tabela periódica conhecida. Fragmentos emitem luz própria mesmo nas profundezas mais absolutas, sugerindo uma reação interna contínua de origem desconhecida.</p>
-        <p style="margin-top:14px">A exposição prolongada altera o comportamento biológico de organismos marinhos em minutos. Hipóteses incluem mutação genética acelerada por campo eletromagnético, symbiose forçada ou parasitismo celular. Nenhuma foi confirmada.</p>
+        <div class="element-layout reveal" style="transition-delay:.3s">
+          <div class="element-visual">
+            <canvas id="el-big" width="144" height="132" class="glow-green float"></canvas>
+          </div>
+          <div class="element-info">
+            <h3>CLASSIFICAÇÃO: INDEFINIDA</h3>
+            <p class="element-subtitle">// ARQUIVO CLASSIFICADO — NÍVEL OMEGA //</p>
+            <p>O elemento exibe propriedades eletromagnéticas sem paralelo na tabela periódica conhecida. Fragmentos
+              emitem luz própria mesmo nas profundezas mais absolutas, sugerindo uma reação interna contínua de origem
+              desconhecida.</p>
+            <p style="margin-top:14px">A exposição prolongada altera o comportamento biológico de organismos marinhos em
+              minutos. Hipóteses incluem mutação genética acelerada por campo eletromagnético, symbiose forçada ou
+              parasitismo celular. Nenhuma foi confirmada.</p>
 
-        <div class="el-stats">
-          <div class="el-stat"><span class="el-stat-label">RADIOATIVIDADE</span><div class="el-stat-bar"><div class="el-stat-fill" style="width:82%"></div></div></div>
-          <div class="el-stat"><span class="el-stat-label">MAGNETISMO</span><div class="el-stat-bar"><div class="el-stat-fill" style="width:96%"></div></div></div>
-          <div class="el-stat"><span class="el-stat-label">TOXICIDADE</span><div class="el-stat-bar"><div class="el-stat-fill" style="width:68%"></div></div></div>
-          <div class="el-stat"><span class="el-stat-label">INSTABILIDADE</span><div class="el-stat-bar"><div class="el-stat-fill" style="width:55%"></div></div></div>
-          <div class="el-stat"><span class="el-stat-label">LUMINESCÊNCIA</span><div class="el-stat-bar"><div class="el-stat-fill" style="width:100%"></div></div></div>
+            <div class="el-stats">
+              <div class="el-stat"><span class="el-stat-label">RADIOATIVIDADE</span>
+                <div class="el-stat-bar">
+                  <div class="el-stat-fill" style="width:82%"></div>
+                </div>
+              </div>
+              <div class="el-stat"><span class="el-stat-label">MAGNETISMO</span>
+                <div class="el-stat-bar">
+                  <div class="el-stat-fill" style="width:96%"></div>
+                </div>
+              </div>
+              <div class="el-stat"><span class="el-stat-label">TOXICIDADE</span>
+                <div class="el-stat-bar">
+                  <div class="el-stat-fill" style="width:68%"></div>
+                </div>
+              </div>
+              <div class="el-stat"><span class="el-stat-label">INSTABILIDADE</span>
+                <div class="el-stat-bar">
+                  <div class="el-stat-fill" style="width:55%"></div>
+                </div>
+              </div>
+              <div class="el-stat"><span class="el-stat-label">LUMINESCÊNCIA</span>
+                <div class="el-stat-bar">
+                  <div class="el-stat-fill" style="width:100%"></div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top:20px">
+              <span class="el-tag">RADIAÇÃO ATIVA</span>
+              <span class="el-tag">NÃO CATALOGADO</span>
+              <span class="el-tag">BIOLÓGICO: ALTERADOR</span>
+              <span class="el-tag">NÍVEL: Ω</span>
+            </div>
+          </div>
         </div>
-
-        <div style="margin-top:20px">
-          <span class="el-tag">RADIAÇÃO ATIVA</span>
-          <span class="el-tag">NÃO CATALOGADO</span>
-          <span class="el-tag">BIOLÓGICO: ALTERADOR</span>
-          <span class="el-tag">NÍVEL: Ω</span>
-        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ══════════════════════════════════════════
+    <!-- ══════════════════════════════════════════
      WRECK — 3500m  Zona Hadal
 ══════════════════════════════════════════ -->
-<section id="wreck">
-  <div class="bubbles" id="bubbles-wreck"></div>
-  <div class="sec-content">
-    <span class="sec-tag reveal">// 06 — ambiente</span>
-    <span class="sec-depth reveal" style="transition-delay:.1s">▼ 3500m · Zona Hadal</span>
-    <h2 class="sec-title reveal" style="transition-delay:.2s">O <span class="accent">NAUFRÁGIO</span></h2>
-    <p class="sec-lead reveal" style="transition-delay:.3s">
-      O casco do cargueiro original repousa partido ao meio no fundo do abismo. É ao mesmo tempo o maior depósito de fragmentos do elemento e o local mais perigoso de toda a missão.
-    </p>
+    <section id="wreck">
+      <div class="bubbles" id="bubbles-wreck"></div>
+      <div class="sec-content">
+        <span class="sec-tag reveal">// 06 — ambiente</span>
+        <span class="sec-depth reveal" style="transition-delay:.1s">▼ 3500m · Zona Hadal</span>
+        <h2 class="sec-title reveal" style="transition-delay:.2s">O <span class="accent">NAUFRÁGIO</span></h2>
+        <p class="sec-lead reveal" style="transition-delay:.3s">
+          O casco do cargueiro original repousa partido ao meio no fundo do abismo. É ao mesmo tempo o maior depósito de
+          fragmentos do elemento e o local mais perigoso de toda a missão.
+        </p>
 
-    <div class="wreck-layout">
-      <div class="wreck-canvas-wrap reveal" style="transition-delay:.3s">
-        <canvas id="wreck-canvas"></canvas>
-      </div>
-      <div class="wreck-text reveal" style="transition-delay:.4s">
-        <p>O interior do navio <em>esconde os maiores depósitos do elemento</em>. Câmaras escuras, corredores alagados e cascos deformados pela pressão criam um labirinto mortal para o submarino.</p>
-        <p>As criaturas mais <em>resistentes e agressivas</em> escolheram o naufrágio como território. A concentração do elemento parece amplificar o comportamento predatório delas.</p>
-        <p>Cada compartimento do navio apresenta <em>desafios únicos</em>: câmaras de pressão instáveis, correntes subaquáticas e fragmentos presos em estruturas que precisam ser liberados com o ataque de pressão.</p>
-        <p>Encontrar a <em>sala de carga principal</em> do navio é o objetivo secreto de missões avançadas — mas o que guarda essa sala é diferente de tudo que o jogador já enfrentou.</p>
-        <div class="wreck-warning">
-          ATENÇÃO: A estrutura do casco está em colapso progressivo. Movimentos bruscos ou uso do Pulso Sônico podem desencadear desabamentos.
+        <div class="wreck-layout">
+          <div class="wreck-canvas-wrap reveal" style="transition-delay:.3s">
+            <canvas id="wreck-canvas"></canvas>
+          </div>
+          <div class="wreck-text reveal" style="transition-delay:.4s">
+            <p>O interior do navio <em>esconde os maiores depósitos do elemento</em>. Câmaras escuras, corredores
+              alagados e cascos deformados pela pressão criam um labirinto mortal para o submarino.</p>
+            <p>As criaturas mais <em>resistentes e agressivas</em> escolheram o naufrágio como território. A
+              concentração do elemento parece amplificar o comportamento predatório delas.</p>
+            <p>Cada compartimento do navio apresenta <em>desafios únicos</em>: câmaras de pressão instáveis, correntes
+              subaquáticas e fragmentos presos em estruturas que precisam ser liberados com o ataque de pressão.</p>
+            <p>Encontrar a <em>sala de carga principal</em> do navio é o objetivo secreto de missões avançadas — mas o
+              que guarda essa sala é diferente de tudo que o jogador já enfrentou.</p>
+            <div class="wreck-warning">
+              ATENÇÃO: A estrutura do casco está em colapso progressivo. Movimentos bruscos ou uso do Pulso Sônico podem
+              desencadear desabamentos.
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ══════════════════════════════════════════
+    <!-- ══════════════════════════════════════════
+     INSPIRATION — 4200m
+     Submarine pulls the Subnautica image
+══════════════════════════════════════════ -->
+    <section id="inspiration">
+      <div class="bubbles" id="bubbles-inspiration"></div>
+      <div class="sec-content">
+        <span class="sec-tag reveal">// 07 — inspiração</span>
+        <span class="sec-depth reveal" style="transition-delay:.1s">▼ 4200m · Fronteira do Abismo</span>
+        <h2 class="sec-title reveal" style="transition-delay:.2s">O LEGADO DE <span
+            class="accent-cyan">SUBNAUTICA</span></h2>
+
+        <div class="inspiration-container reveal" style="transition-delay:.3s">
+          <div class="inspiration-text">
+            <p>A imensidão desconhecida, o medo do que espreita na escuridão e a maravilha da descoberta biológica.</p>
+            <p><em>DEEP HORIZON</em> nasceu da paixão pela atmosfera de isolamento e sobrevivência que games como
+              <strong>Subnautica</strong> eternizaram. Prestamos homenagem à obra que nos ensinou que o oceano é o lugar
+              mais alienígena da Terra.
+            </p>
+          </div>
+          <div id="subnautica-frame">
+            <img src="imgs/subnautica.png" alt="Inspiração Subnautica" id="subnautica-img">
+            <div class="frame-glitch"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
      TEAM — 5000m  Fundo do Abismo
 ══════════════════════════════════════════ -->
-<section id="team">
-  <div class="sec-content">
-    <span class="sec-tag reveal">// 07 — equipe</span>
-    <span class="sec-depth reveal" style="transition-delay:.1s">▼ 5000m · Fundo do Abismo</span>
+    <section id="team">
+      <div class="sec-content">
+        <span class="sec-tag reveal">// 08 — equipe</span>
+        <span class="sec-depth reveal" style="transition-delay:.1s">▼ 5000m · Fundo do Abismo</span>
 
-    <div class="studio-header reveal" style="transition-delay:.2s">
-      <div>
-        <div class="studio-name-big">E-HORIZON <span class="accent">STUDIO</span></div>
-        <div class="studio-tagline">DESENVOLVENDO MUNDOS DESDE 2025</div>
+        <div class="studio-header reveal" style="transition-delay:.2s">
+          <div>
+            <div class="studio-name-big">E-HORIZON <span class="accent">STUDIO</span></div>
+            <div class="studio-tagline">DESENVOLVENDO MUNDOS DESDE 2025</div>
+          </div>
+        </div>
+
+        <p class="sec-lead reveal" style="transition-delay:.3s;max-width:680px">
+          Cinco pessoas. Uma ideia. Deep Horizon é o resultado de criatividade colaborativa, onde cada membro da equipe
+          traz uma especialidade única que molda cada pixel, cada mecânica e cada linha da narrativa.
+        </p>
+
+        <div class="team-grid">
+
+          <div class="team-card reveal" style="transition-delay:.1s">
+            <canvas class="team-avatar" id="av-0" width="56" height="56"></canvas>
+            <div class="team-name">GUSTAVO VITOR</div>
+            <div class="team-role">SPRITES & SPRITESHEETS</div>
+            <p style="margin-top:10px;font-size:11.5px;color:rgba(150,200,180,.5);line-height:1.6;font-weight:200">
+              Responsável por dar vida visual ao jogo — cada criatura, cada fragmento, cada animação.</p>
+          </div>
+
+          <div class="team-card reveal" style="transition-delay:.2s">
+            <canvas class="team-avatar" id="av-1" width="56" height="56"></canvas>
+            <div class="team-name">GUSTAVO KENJI</div>
+            <div class="team-role">LEVEL DESIGN</div>
+            <p style="margin-top:10px;font-size:11.5px;color:rgba(150,200,220,.5);line-height:1.6;font-weight:200">
+              Arquiteto dos mapas abissais — cada corredor, cada câmara escura, cada armadilha escondida.</p>
+          </div>
+
+          <div class="team-card reveal" style="transition-delay:.3s">
+            <canvas class="team-avatar" id="av-2" width="56" height="56"></canvas>
+            <div class="team-name">ADRIAN REZENDE</div>
+            <div class="team-role">PROGRAMAÇÃO</div>
+            <p style="margin-top:10px;font-size:11.5px;color:rgba(180,160,255,.5);line-height:1.6;font-weight:200">
+              Transformando mecânicas e sistemas em código funcional — o motor que move o submarino.</p>
+          </div>
+
+          <div class="team-card reveal" style="transition-delay:.4s">
+            <canvas class="team-avatar" id="av-3" width="56" height="56"></canvas>
+            <div class="team-name">BRUNO</div>
+            <div class="team-role">PROGRAMAÇÃO</div>
+            <p style="margin-top:10px;font-size:11.5px;color:rgba(180,160,255,.5);line-height:1.6;font-weight:200">
+              Co-desenvolvedor do sistema de combate, IA dos inimigos e física do ambiente aquático.</p>
+          </div>
+
+          <div class="team-card reveal" style="transition-delay:.5s">
+            <canvas class="team-avatar" id="av-4" width="56" height="56"></canvas>
+            <div class="team-name">CALLEBE</div>
+            <div class="team-role">LORE & CUTSCENES</div>
+            <p style="margin-top:10px;font-size:11.5px;color:rgba(255,200,120,.5);line-height:1.6;font-weight:200">Autor
+              da narrativa, criador do universo de Deep Horizon e roteirista das cutscenes do jogo.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div>
+      <div class="footer-logo">DEEP <span>HORIZON</span></div>
+      <div
+        style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--grey);letter-spacing:.1em;margin-top:6px">
+        E-HORIZON STUDIO · 2025
       </div>
     </div>
-
-    <p class="sec-lead reveal" style="transition-delay:.3s;max-width:680px">
-      Cinco pessoas. Uma ideia. Deep Horizon é o resultado de criatividade colaborativa, onde cada membro da equipe traz uma especialidade única que molda cada pixel, cada mecânica e cada linha da narrativa.
-    </p>
-
-    <div class="team-grid">
-
-      <div class="team-card reveal" style="transition-delay:.1s">
-        <canvas class="team-avatar" id="av-0" width="56" height="56"></canvas>
-        <div class="team-name">GUSTAVO VITOR</div>
-        <div class="team-role">SPRITES & SPRITESHEETS</div>
-        <p style="margin-top:10px;font-size:11.5px;color:rgba(150,200,180,.5);line-height:1.6;font-weight:200">Responsável por dar vida visual ao jogo — cada criatura, cada fragmento, cada animação.</p>
-      </div>
-
-      <div class="team-card reveal" style="transition-delay:.2s">
-        <canvas class="team-avatar" id="av-1" width="56" height="56"></canvas>
-        <div class="team-name">GUSTAVO KENJI</div>
-        <div class="team-role">LEVEL DESIGN</div>
-        <p style="margin-top:10px;font-size:11.5px;color:rgba(150,200,220,.5);line-height:1.6;font-weight:200">Arquiteto dos mapas abissais — cada corredor, cada câmara escura, cada armadilha escondida.</p>
-      </div>
-
-      <div class="team-card reveal" style="transition-delay:.3s">
-        <canvas class="team-avatar" id="av-2" width="56" height="56"></canvas>
-        <div class="team-name">ADRIAN REZENDE</div>
-        <div class="team-role">PROGRAMAÇÃO</div>
-        <p style="margin-top:10px;font-size:11.5px;color:rgba(180,160,255,.5);line-height:1.6;font-weight:200">Transformando mecânicas e sistemas em código funcional — o motor que move o submarino.</p>
-      </div>
-
-      <div class="team-card reveal" style="transition-delay:.4s">
-        <canvas class="team-avatar" id="av-3" width="56" height="56"></canvas>
-        <div class="team-name">BRUNO</div>
-        <div class="team-role">PROGRAMAÇÃO</div>
-        <p style="margin-top:10px;font-size:11.5px;color:rgba(180,160,255,.5);line-height:1.6;font-weight:200">Co-desenvolvedor do sistema de combate, IA dos inimigos e física do ambiente aquático.</p>
-      </div>
-
-      <div class="team-card reveal" style="transition-delay:.5s">
-        <canvas class="team-avatar" id="av-4" width="56" height="56"></canvas>
-        <div class="team-name">CALLEBE</div>
-        <div class="team-role">LORE & CUTSCENES</div>
-        <p style="margin-top:10px;font-size:11.5px;color:rgba(255,200,120,.5);line-height:1.6;font-weight:200">Autor da narrativa, criador do universo de Deep Horizon e roteirista das cutscenes do jogo.</p>
-      </div>
-
+    <div class="footer-info">
+      <div>TODOS OS DIREITOS RESERVADOS</div>
+      <div style="margin-top:4px;opacity:.45">PROFUNDIDADE MÁXIMA: ∞</div>
     </div>
-  </div>
-</section>
+  </footer>
 
-</main>
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="js/sprites.js"></script>
+  <script src="js/ocean.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    /* ═══ INIT ALL SPRITES ═══ */
+    window.addEventListener('DOMContentLoaded', () => {
 
-<footer>
-  <div>
-    <div class="footer-logo">DEEP <span>HORIZON</span></div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--grey);letter-spacing:.1em;margin-top:6px">
-      E-HORIZON STUDIO · 2025
-    </div>
-  </div>
-  <div class="footer-info">
-    <div>TODOS OS DIREITOS RESERVADOS</div>
-    <div style="margin-top:4px;opacity:.45">PROFUNDIDADE MÁXIMA: ∞</div>
-  </div>
-</footer>
+      // Submarine
+      Sprites.drawSub(document.getElementById('sub-canvas'));
 
-<!-- Scripts -->
-<script src="js/sprites.js"></script>
-<script src="js/ocean.js"></script>
-<script src="js/app.js"></script>
-<script>
-/* ═══ INIT ALL SPRITES ═══ */
-window.addEventListener('DOMContentLoaded', () => {
+      // Lore icons
+      (function () {
+        // Icon 1: element crystal
+        Sprites.drawElementFrag(document.getElementById('lore-icon-1'), 4);
+        // Icon 2: wave/storm
+        const c2 = document.getElementById('lore-icon-2');
+        const art = [
+          '..........',
+          '..AAAA....',
+          '.ABBBBA...',
+          'ABBBBBBA..',
+          '.ABBBBA...',
+          '..AAAA....',
+          '..ABBA....',
+          '.ABBBBA...',
+          'ABBBBBBA..',
+          '..........',
+        ];
+        c2.width = 10 * 4; c2.height = 10 * 4;
+        const ctx2 = c2.getContext('2d'); ctx2.imageSmoothingEnabled = false;
+        art.forEach((r, y) => [...r].forEach((ch, x) => {
+          if (ch === '.' || !{ A: '#1144aa', B: '#3388ee' }[ch]) return;
+          ctx2.fillStyle = { A: '#1144aa', B: '#3388ee' }[ch];
+          ctx2.fillRect(x * 4, y * 4, 4, 4);
+        }));
+        // Icon 3: satellite signal
+        const c3 = document.getElementById('lore-icon-3');
+        const art3 = [
+          '..A.......', '.AA.......', '.AAA......', '.AAAA.....', '.AAAAA....',
+          '......A...', '.....AA...', '....AAA...', '...AAAA...', '..AAAAA...',
+        ];
+        c3.width = 10 * 4; c3.height = 10 * 4;
+        const ctx3 = c3.getContext('2d'); ctx3.imageSmoothingEnabled = false;
+        art3.forEach((r, y) => [...r].forEach((ch, x) => {
+          if (ch === '.') return;
+          ctx3.fillStyle = '#00c8ff';
+          ctx3.fillRect(x * 4, y * 4, 4, 4);
+        }));
+        // Icon 4: factory/refinery
+        const c4 = document.getElementById('lore-icon-4');
+        const art4 = [
+          '..A.A.A...', '.AAAAAAA..', '.AAAAAAA..', 'AABBBBBBA.', 'AABCCCBA..', 'AABBBBA...', 'AAAAAA....', '..........'];
+        c4.width = 10 * 4; c4.height = 8 * 4;
+        const ctx4 = c4.getContext('2d'); ctx4.imageSmoothingEnabled = false;
+        art4.forEach((r, y) => [...r].forEach((ch, x) => {
+          if (ch === '.') return;
+          ctx4.fillStyle = { A: '#445566', B: '#667788', C: '#00c8ff' }[ch] || '#445566';
+          ctx4.fillRect(x * 4, y * 4, 4, 4);
+        }));
+      })();
 
-  // Submarine
-  Sprites.drawSub(document.getElementById('sub-canvas'));
+      // Map preview
+      Sprites.drawMapPreview(document.getElementById('map-canvas'));
 
-  // Lore icons
-  (function() {
-    // Icon 1: element crystal
-    Sprites.drawElementFrag(document.getElementById('lore-icon-1'), 4);
-    // Icon 2: wave/storm
-    const c2 = document.getElementById('lore-icon-2');
-    const art = [
-      '..........',
-      '..AAAA....',
-      '.ABBBBA...',
-      'ABBBBBBA..',
-      '.ABBBBA...',
-      '..AAAA....',
-      '..ABBA....',
-      '.ABBBBA...',
-      'ABBBBBBA..',
-      '..........',
-    ];
-    c2.width=10*4; c2.height=10*4;
-    const ctx2=c2.getContext('2d'); ctx2.imageSmoothingEnabled=false;
-    art.forEach((r,y)=>[...r].forEach((ch,x)=>{
-      if(ch==='.'||!{A:'#1144aa',B:'#3388ee'}[ch])return;
-      ctx2.fillStyle={A:'#1144aa',B:'#3388ee'}[ch];
-      ctx2.fillRect(x*4,y*4,4,4);
-    }));
-    // Icon 3: satellite signal
-    const c3=document.getElementById('lore-icon-3');
-    const art3=[
-      '..A.......','.AA.......','.AAA......','.AAAA.....','.AAAAA....',
-      '......A...','.....AA...','....AAA...','...AAAA...','..AAAAA...',
-    ];
-    c3.width=10*4; c3.height=10*4;
-    const ctx3=c3.getContext('2d'); ctx3.imageSmoothingEnabled=false;
-    art3.forEach((r,y)=>[...r].forEach((ch,x)=>{
-      if(ch==='.')return;
-      ctx3.fillStyle='#00c8ff';
-      ctx3.fillRect(x*4,y*4,4,4);
-    }));
-    // Icon 4: factory/refinery
-    const c4=document.getElementById('lore-icon-4');
-    const art4=[
-      '..A.A.A...','.AAAAAAA..','.AAAAAAA..','AABBBBBBA.','AABCCCBA..','AABBBBA...','AAAAAA....','..........'];
-    c4.width=10*4; c4.height=8*4;
-    const ctx4=c4.getContext('2d'); ctx4.imageSmoothingEnabled=false;
-    art4.forEach((r,y)=>[...r].forEach((ch,x)=>{
-      if(ch==='.')return;
-      ctx4.fillStyle={A:'#445566',B:'#667788',C:'#00c8ff'}[ch]||'#445566';
-      ctx4.fillRect(x*4,y*4,4,4);
-    }));
-  })();
+      // Mechanic icons
+      Sprites.drawLantern(document.getElementById('mech-explore'));
+      Sprites.drawElementFrag(document.getElementById('mech-collect'), 6);
+      Sprites.drawO2(document.getElementById('mech-oxygen'));
+      Sprites.drawDock(document.getElementById('mech-extract'));
 
-  // Map preview
-  Sprites.drawMapPreview(document.getElementById('map-canvas'));
+      // Lose conditions
+      Sprites.drawSkull(document.getElementById('lose-o2'));
+      (function () {
+        const c = document.getElementById('lose-monster');
+        const art = [
+          '.......', '.AAAA..', 'ABBBBA.', 'ABCCBA.', 'ABBBBA.', '.AAAA..', '.A..A..', '.......'];
+        c.width = 7 * 8; c.height = 8 * 7;
+        const ctx = c.getContext('2d'); ctx.imageSmoothingEnabled = false;
+        art.forEach((r, y) => [...r].forEach((ch, x) => {
+          if (ch === '.') return;
+          ctx.fillStyle = { A: '#aa6600', B: '#ee9900', C: '#ffffff' }[ch];
+          ctx.fillRect(x * 8, y * 7, 8, 7);
+        }));
+      })();
+      Sprites.drawCrate(document.getElementById('lose-quota'));
 
-  // Mechanic icons
-  Sprites.drawLantern(document.getElementById('mech-explore'));
-  Sprites.drawElementFrag(document.getElementById('mech-collect'), 6);
-  Sprites.drawO2(document.getElementById('mech-oxygen'));
-  Sprites.drawDock(document.getElementById('mech-extract'));
+      // Weapon sprites
+      Sprites.drawBlade(document.getElementById('wpn-blade'));
+      (function () {
+        // Burst — 3 blades fanned
+        const c = document.getElementById('wpn-burst');
+        const art = [
+          '.......AAAA.',
+          '....AAAAAAAA',
+          '..AAAAAAAAAB',
+          'AAAAAAAAAAB.',
+          '..AAAAAAAAAB',
+          '....AAAAAAAA',
+          '.......AAAA.',
+          '............',
+        ];
+        c.width = 12 * 7; c.height = 8 * 6;
+        const ctx = c.getContext('2d'); ctx.imageSmoothingEnabled = false;
+        art.forEach((r, y) => [...r].forEach((ch, x) => {
+          if (ch === '.') return;
+          ctx.fillStyle = { A: '#00e5cc', B: '#ffffff' }[ch];
+          ctx.fillRect(x * 7, y * 6, 7, 6);
+        }));
+      })();
+      (function () {
+        // Pulse — circle wave
+        const c = document.getElementById('wpn-pulse');
+        c.width = 100; c.height = 48;
+        const ctx = c.getContext('2d');
+        const cx = 50, cy = 24;
+        [24, 18, 12, 6].forEach((r, i) => {
+          ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+          const a = 0.9 - i * .15;
+          ctx.strokeStyle = `rgba(0,200,255,${a})`; ctx.lineWidth = 2; ctx.stroke();
+        });
+        ctx.fillStyle = 'rgba(0,200,255,0.8)';
+        ctx.fillRect(cx - 2, cy - 2, 4, 4);
+        const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, 24);
+        grd.addColorStop(0, 'rgba(0,200,255,0.15)');
+        grd.addColorStop(1, 'transparent');
+        ctx.fillStyle = grd; ctx.fillRect(0, 0, 100, 48);
+      })();
 
-  // Lose conditions
-  Sprites.drawSkull(document.getElementById('lose-o2'));
-  (function(){
-    const c=document.getElementById('lose-monster');
-    const art=[
-      '.......','.AAAA..','ABBBBA.','ABCCBA.','ABBBBA.','.AAAA..','.A..A..','.......'];
-    c.width=7*8; c.height=8*7;
-    const ctx=c.getContext('2d'); ctx.imageSmoothingEnabled=false;
-    art.forEach((r,y)=>[...r].forEach((ch,x)=>{
-      if(ch==='.')return;
-      ctx.fillStyle={A:'#aa6600',B:'#ee9900',C:'#ffffff'}[ch];
-      ctx.fillRect(x*8,y*7,8,7);
-    }));
-  })();
-  Sprites.drawCrate(document.getElementById('lose-quota'));
+      // Monsters
+      Sprites.drawLuminaris(document.getElementById('mon-luminaris'));
+      Sprites.drawNulmedusa(document.getElementById('mon-nulmedusa'));
+      Sprites.drawAnglerfish(document.getElementById('mon-anglerfish'));
+      Sprites.drawCrab(document.getElementById('mon-crab'));
+      Sprites.drawSerpent(document.getElementById('mon-serpent'));
 
-  // Weapon sprites
-  Sprites.drawBlade(document.getElementById('wpn-blade'));
-  (function(){
-    // Burst — 3 blades fanned
-    const c=document.getElementById('wpn-burst');
-    const art=[
-      '.......AAAA.',
-      '....AAAAAAAA',
-      '..AAAAAAAAAB',
-      'AAAAAAAAAAB.',
-      '..AAAAAAAAAB',
-      '....AAAAAAAA',
-      '.......AAAA.',
-      '............',
-    ];
-    c.width=12*7; c.height=8*6;
-    const ctx=c.getContext('2d'); ctx.imageSmoothingEnabled=false;
-    art.forEach((r,y)=>[...r].forEach((ch,x)=>{
-      if(ch==='.')return;
-      ctx.fillStyle={A:'#00e5cc',B:'#ffffff'}[ch];
-      ctx.fillRect(x*7,y*6,7,6);
-    }));
-  })();
-  (function(){
-    // Pulse — circle wave
-    const c=document.getElementById('wpn-pulse');
-    c.width=100; c.height=48;
-    const ctx=c.getContext('2d');
-    const cx=50,cy=24;
-    [24,18,12,6].forEach((r,i)=>{
-      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
-      const a=0.9-i*.15;
-      ctx.strokeStyle=`rgba(0,200,255,${a})`; ctx.lineWidth=2; ctx.stroke();
+      // Element big
+      Sprites.drawElementFrag(document.getElementById('el-big'), 12);
+
+      // Wreck scene
+      Sprites.drawWreckScene(document.getElementById('wreck-canvas'));
+
+      // Team avatars
+      const avatarData = [
+        { color: '#00e5cc', label: '#00e5cc', init: 'GV' },
+        { color: '#00c8ff', label: '#00c8ff', init: 'GK' },
+        { color: '#9055ff', label: '#bb88ff', init: 'AR' },
+        { color: '#7040e0', label: '#bb88ff', init: 'BR' },
+        { color: '#ffb800', label: '#ffb800', init: 'CA' },
+      ];
+      avatarData.forEach((d, i) => {
+        Sprites.drawAvatar(document.getElementById('av-' + i), d.color, d.label, d.init);
+      });
+
+      // Update nav depth display
+      window.addEventListener('scroll', () => {
+        const d = Math.round(window.scrollY / (document.body.scrollHeight - window.innerHeight) * 5000);
+        const el = document.getElementById('nav-depth');
+        if (el) el.textContent = `▼ ${d}m`;
+      });
+
     });
-    ctx.fillStyle='rgba(0,200,255,0.8)';
-    ctx.fillRect(cx-2,cy-2,4,4);
-    const grd=ctx.createRadialGradient(cx,cy,0,cx,cy,24);
-    grd.addColorStop(0,'rgba(0,200,255,0.15)');
-    grd.addColorStop(1,'transparent');
-    ctx.fillStyle=grd; ctx.fillRect(0,0,100,48);
-  })();
-
-  // Monsters
-  Sprites.drawLuminaris(document.getElementById('mon-luminaris'));
-  Sprites.drawNulmedusa(document.getElementById('mon-nulmedusa'));
-  Sprites.drawAnglerfish(document.getElementById('mon-anglerfish'));
-  Sprites.drawCrab(document.getElementById('mon-crab'));
-  Sprites.drawSerpent(document.getElementById('mon-serpent'));
-
-  // Element big
-  Sprites.drawElementFrag(document.getElementById('el-big'), 12);
-
-  // Wreck scene
-  Sprites.drawWreckScene(document.getElementById('wreck-canvas'));
-
-  // Team avatars
-  const avatarData = [
-    { color:'#00e5cc', label:'#00e5cc', init:'GV' },
-    { color:'#00c8ff', label:'#00c8ff', init:'GK' },
-    { color:'#9055ff', label:'#bb88ff', init:'AR' },
-    { color:'#7040e0', label:'#bb88ff', init:'BR' },
-    { color:'#ffb800', label:'#ffb800', init:'CA' },
-  ];
-  avatarData.forEach((d,i)=>{
-    Sprites.drawAvatar(document.getElementById('av-'+i), d.color, d.label, d.init);
-  });
-
-  // Update nav depth display
-  window.addEventListener('scroll', () => {
-    const d = Math.round(window.scrollY/(document.body.scrollHeight-window.innerHeight)*5000);
-    const el = document.getElementById('nav-depth');
-    if(el) el.textContent = `▼ ${d}m`;
-  });
-
-});
-</script>
+  </script>
 </body>
+
 </html>
