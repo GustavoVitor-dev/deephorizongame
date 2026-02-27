@@ -90,7 +90,7 @@
         <p class="hero-eyebrow reveal">E-HORIZON STUDIO PRESENTS</p>
         <h1 class="hero-title reveal" style="transition-delay:.15s">DEEP<br>HORIZON</h1>
         <p class="hero-sub reveal" style="transition-delay:.35s">
-          Um elemento desconhecido naufraga no Estreito de Drake e corrompe o abismo.<br>
+          Um <strong>2D Side-Scroller</strong> de exploração e sobrevivência subaquática.<br>
           Pilote o submarino. Colete os fragmentos. Sobreviva ao que a escuridão esconde.
         </p>
         <div class="hero-cta reveal" style="transition-delay:.55s">
@@ -653,9 +653,31 @@
             <p style="margin-top:10px;font-size:11.5px;color:rgba(255,200,120,.5);line-height:1.6;font-weight:200">Autor
               da narrativa, criador do universo de Deep Horizon e roteirista das cutscenes do jogo.</p>
           </div>
-
         </div>
       </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+     ENCOUNTER — PROFUNDIDADE PROIBIDA
+══════════════════════════════════════════ -->
+    <section id="encounter">
+      <div class="horror-wrapper reveal" style="transition-delay:.3s">
+        <div class="horror-container">
+          <video id="horror-video" autoplay playsinline preload="auto">
+            <source src="imgs/Deep_Sea_Anglerfish_Horror_Encounter.mp4" type="video/mp4">
+          </video>
+          <div class="horror-end-content">
+            <h1 class="end-title">DEEP<br><span>HORIZON</span></h1>
+            <p class="end-sub">A JORNADA APENAS COMEÇOU</p>
+          </div>
+          <div class="horror-overlay"></div>
+          <div class="horror-spotlight"></div>
+        </div>
+      </div>
+      <!-- Horror Ambient Audio -->
+      <audio id="horror-ambient" preload="auto" crossorigin="anonymous">
+        <source src="https://cdn.pixabay.com/audio/2021/08/04/audio_bbdecde163.mp3" type="audio/mpeg">
+      </audio>
     </section>
 
   </main>
@@ -676,6 +698,7 @@
 
   <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
   <script src="js/sprites.js"></script>
   <script src="js/ocean.js"></script>
   <script src="js/app.js"></script>

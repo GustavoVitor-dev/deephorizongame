@@ -41,8 +41,36 @@
   box-sizing: border-box;
 }
 
+/* ─── CUSTOM SCROLLBAR ─── */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--abyss5);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--cyan-dim), var(--abyss2));
+  border-radius: 5px;
+  border: 2px solid var(--abyss5);
+  box-shadow: 0 0 15px rgba(0, 200, 255, 0.2);
+  transition: all 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cyan);
+  box-shadow: 0 0 20px rgba(0, 200, 255, 0.5);
+}
+
+/* Firefox Support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--cyan-dim) var(--abyss5);
+}
+
 html {
-  scroll-behavior: smooth;
   overflow-x: hidden;
 }
 
@@ -50,7 +78,6 @@ body {
   background: var(--void);
   color: var(--white);
   font-family: 'Exo 2', sans-serif;
-  overflow-x: hidden;
   cursor: none;
 }
 
@@ -398,7 +425,7 @@ main {
 /* ─── SECTION BASE ─── */
 section {
   min-height: 100vh;
-  padding: 110px 64px 80px;
+  padding: 80px 64px 60px;
   position: relative;
   overflow: hidden;
 }
@@ -433,7 +460,7 @@ section {
 }
 
 #team {
-  background: linear-gradient(180deg, #010306 0%, #010204 100%);
+  background: linear-gradient(180deg, #010306 0%, #000 100%);
 }
 
 /* ─── BUBBLE LAYER ─── */
@@ -1542,4 +1569,134 @@ footer {
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, .4) 100%);
+}
+
+/* ─── HORROR ENCOUNTER ─── */
+#encounter {
+  background: #000;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 20px;
+}
+
+.horror-wrapper {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.horror-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: #000;
+  border: none;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+#horror-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Dark overall, high contrast */
+  filter: brightness(0.4) contrast(1.7) saturate(0.8);
+  /* The "Mask" makes the center clear and the rest hidden */
+  mask-image: radial-gradient(circle at center, black 10%, rgba(0, 0, 0, 0.4) 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle at center, black 10%, rgba(0, 0, 0, 0.4) 30%, transparent 70%);
+  transition: opacity 1.5s ease;
+  opacity: 1;
+}
+
+body.video-ended #horror-video {
+  opacity: 0 !important;
+}
+
+.horror-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.horror-spotlight {
+  position: absolute;
+  inset: 0;
+  /* Strong spotlight effect */
+  background: radial-gradient(circle at center, transparent 15%, rgba(0, 0, 0, 1) 60%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.horror-end-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 2s ease;
+  width: 100%;
+}
+
+.end-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(40px, 8vw, 100px);
+  font-weight: 900;
+  letter-spacing: .15em;
+  line-height: .9;
+  background: linear-gradient(180deg, #fff, var(--cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+}
+
+.end-title span {
+  color: var(--cyan);
+}
+
+.end-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .5em;
+  color: var(--cyan-dim);
+  opacity: 0.8;
+}
+
+body.video-ended .horror-end-content {
+  opacity: 1 !important;
+}
+
+.horror-caption {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--danger);
+  letter-spacing: .4em;
+  opacity: .6;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.accent-danger {
+  color: var(--danger);
+  text-shadow: 0 0 15px rgba(255, 58, 46, 0.3);
+}
+
+/* ─── HUD Hiding for Horror ─── */
+body.is-horror #hud,
+body.is-horror #sub-wrap,
+body.is-horror #nav,
+body.is-horror #depth-sidebar {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
 }

@@ -12,9 +12,6 @@
 
   let mouseX = 0, mouseY = 0;
   let ringX = 0, ringY = 0;
-
-  // Track if audio is fading to prevent conflicts
-  let isAudioFading = false;
   let isMoving = false;
 
   document.addEventListener('mousemove', e => {
@@ -84,7 +81,7 @@
 (function () {
   const nav = document.getElementById('nav');
   const links = document.querySelectorAll('.nav-links a');
-  const sections = ['hero', 'lore', 'gameplay', 'weapons', 'monsters', 'element-sec', 'wreck', 'inspiration', 'team', 'encounter'];
+  const sections = ['hero', 'lore', 'gameplay', 'weapons', 'monsters', 'element-sec', 'wreck', 'team'];
 
   window.addEventListener('scroll', () => {
     // scrolled class
@@ -102,67 +99,6 @@
       const href = a.getAttribute('href').replace('#', '');
       a.classList.toggle('active', href === current);
     });
-
-    // Toggle horror mode UI visibility
-    const isHorror = current === 'encounter';
-    document.body.classList.toggle('is-horror', isHorror);
-
-    // Audio & Video control
-    const ambient = document.getElementById('horror-ambient');
-    const video = document.getElementById('horror-video');
-
-    if (ambient) {
-      if (isHorror) {
-        // Stop retrying if the horror section finished
-        if (!document.body.classList.contains('video-ended')) {
-          if (ambient.paused) {
-            ambient.volume = 1;
-            ambient.play().catch(() => { });
-          }
-          if (video && video.paused) {
-            video.play().catch(() => { });
-          }
-        }
-      } else {
-        ambient.pause();
-        ambient.currentTime = 0;
-        if (video) {
-          video.pause();
-          if (video.readyState >= 1) {
-            video.currentTime = 0;
-          }
-        }
-        document.body.classList.remove('video-ended');
-      }
-    }
-  }, { passive: true });
-
-  // Use the horrorVideo reference correctly
-  const horrorVideo = document.getElementById('horror-video');
-  if (horrorVideo) {
-    horrorVideo.addEventListener('ended', () => {
-      document.body.classList.add('video-ended');
-
-      // Stop audio immediately
-      const ambient = document.getElementById('horror-ambient');
-      if (ambient) {
-        ambient.pause();
-        ambient.currentTime = 0;
-      }
-    });
-  }
-
-  // Global click to unlock audio context (Browser requirement)
-  window.addEventListener('click', () => {
-    const ambient = document.getElementById('horror-ambient');
-    if (ambient) {
-      if (document.body.classList.contains('is-horror') && !document.body.classList.contains('video-ended')) {
-        ambient.volume = 1;
-        if (ambient.paused) {
-          ambient.play().catch(() => { });
-        }
-      }
-    }
   }, { passive: true });
 })();
 
@@ -311,3 +247,67 @@ function spawnBubbles(containerId, count) {
   setTimeout(type, 600);
 })();
 
+/* ── Smooth Scrolling (GSAP) ── */
+(function () {
+  if (typeof gsap === 'undefined' || !gsap.plugins.scrollTo) return;
+  const sections = Array.from(document.querySelectorAll('section, footer'));
+  let isScrolling = false;
+  let activeIdx = 0;
+
+  // Sycn index when user manually drags scrollbar
+  window.addEventListener('scroll', () => {
+    if (isScrolling) return;
+    let minDiff = Infinity;
+    const scrollY = window.scrollY + 20; // Match the nav offset
+    sections.forEach((sec, idx) => {
+      const diff = Math.abs(sec.offsetTop - scrollY);
+      if (diff < minDiff) { minDiff = diff; activeIdx = idx; }
+    });
+  }, { passive: true });
+
+  function goToSection(newIdx) {
+    if (newIdx < 0) newIdx = 0;
+    if (newIdx > sections.length - 1) newIdx = sections.length - 1;
+
+    activeIdx = newIdx;
+    isScrolling = true;
+
+    let targetY = sections[activeIdx].offsetTop;
+    // Offset to compensate for the fixed nav (usually around 80px)
+    if (activeIdx > 0 && activeIdx < sections.length - 1) {
+      targetY -= 80;
+    }
+
+    gsap.to(window, {
+      duration: 1.0,
+      scrollTo: targetY,
+      ease: "power2.inOut",
+      onComplete: () => {
+        // Very small cooldown to block touchpad inertial triggers
+        setTimeout(() => { isScrolling = false; }, 100);
+      }
+    });
+  }
+
+  window.addEventListener('wheel', (e) => {
+    e.preventDefault(); // disable standard scroll
+    if (isScrolling) return;
+
+    if (e.deltaY > 0) goToSection(activeIdx + 1);
+    else if (e.deltaY < 0) goToSection(activeIdx - 1);
+  }, { passive: false });
+
+  // Handle keyboard arrows
+  window.addEventListener('keydown', (e) => {
+    if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' ', 'Home', 'End'].includes(e.key)) {
+      e.preventDefault();
+      if (isScrolling) return;
+
+      if (e.key === 'Home') return goToSection(0);
+      if (e.key === 'End') return goToSection(sections.length - 1);
+
+      const isDown = (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ');
+      goToSection(activeIdx + (isDown ? 1 : -1));
+    }
+  }, { passive: false });
+})();
