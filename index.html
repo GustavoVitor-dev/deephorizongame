@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DEEP HORIZON — E-Horizon Studio</title>
+  <title>DEEP HORIZON — Survival Horror Subaquático</title>
+  <meta name="description"
+    content="A luz é sua única aliada. Explore as profundezas em um jogo de sobrevivência atmosférico onde cada decisão conta.">
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -90,8 +92,9 @@
         <p class="hero-eyebrow reveal">E-HORIZON STUDIO PRESENTS</p>
         <h1 class="hero-title reveal" style="transition-delay:.15s">DEEP<br>HORIZON</h1>
         <p class="hero-sub reveal" style="transition-delay:.35s">
-          Um <strong>2D Side-Scroller</strong> de exploração e sobrevivência subaquática.<br>
-          Pilote o submarino. Colete os fragmentos. Sobreviva ao que a escuridão esconde.
+          <strong>A luz é sua única aliada. O abismo, seu maior juiz.</strong><br>
+          Um mergulho tático 2D de alta tensão onde cada segundo de oxigênio e cada sombra<br>
+          moldam seu destino nas profundezas desconhecidas.
         </p>
         <div class="hero-cta reveal" style="transition-delay:.55s">
           <a href="#lore" class="btn btn-primary">MERGULHAR</a>
@@ -107,7 +110,7 @@
 
     <!-- ══════════════════════════════════════════
      LORE — 200m  Zona Mesopelágica
-══════════════════════════════════════════ -->
+    ══════════════════════════════════════════ -->
     <section id="lore">
       <div class="bubbles" id="bubbles-lore"></div>
       <div class="sec-content">
@@ -126,33 +129,34 @@
             <span class="lore-num">01</span>
             <canvas class="lore-icon" id="lore-icon-1" width="48" height="48"></canvas>
             <div class="lore-title">A DESCOBERTA</div>
-            <p>Cientistas identificam um novo elemento metálico com assinatura eletromagnética singular. O governo
-              autoriza transporte urgente via navio cargueiro pelo Estreito de Drake, a rota mais isolada do mundo.</p>
+            <p>O elemento "E-Horizon" é identificado: propriedades eletromagnéticas que desafiam a física. O transporte
+              pelo Estreito de Drake torna-se prioridade máxima.</p>
           </div>
 
           <div class="lore-card reveal" style="transition-delay:.2s">
             <span class="lore-num">02</span>
+            <span class="accent-red" style="font-size:8px;position:absolute;top:10px;right:40px;letter-spacing:.1em">//
+              CRÍTICO</span>
             <canvas class="lore-icon" id="lore-icon-2" width="48" height="48"></canvas>
             <div class="lore-title">O NAUFRÁGIO</div>
-            <p>Uma tempestade de origem desconhecida engole o cargueiro em questão de minutos. Toneladas do elemento são
-              despejadas no oceano. A região começa a mudar de forma imperceptível — e irreversível.</p>
+            <p>Uma tempestade anômala consome o cargueiro. Toneladas do elemento contaminam o leito marinho, iniciando
+              uma mutação irreversível no ecossistema.</p>
           </div>
 
           <div class="lore-card reveal" style="transition-delay:.3s">
             <span class="lore-num">03</span>
             <canvas class="lore-icon" id="lore-icon-3" width="48" height="48"></canvas>
             <div class="lore-title">A ANOMALIA</div>
-            <p>Meses depois, um satélite militar capta uma assinatura eletromagnética anômala exatamente no ponto do
-              naufrágio. A região é imediatamente classificada como restrita. O pânico, por ora, é silencioso.</p>
+            <p>Sinais militares captam assinaturas energéticas no ponto do desastre. A região é isolada. O que antes era
+              mar, agora é território desconhecido.</p>
           </div>
 
           <div class="lore-card reveal" style="transition-delay:.4s">
             <span class="lore-num">04</span>
             <canvas class="lore-icon" id="lore-icon-4" width="48" height="48"></canvas>
-            <div class="lore-title">A REFINARIA</div>
-            <p>Uma estação de refinamento é construída próxima à área de impacto, com containers especiais
-              anti-radiação. Um submarino é enviado para coletar os fragmentos. Ao mergulhar, a missão torna-se muito
-              mais do que previsto.</p>
+            <div class="lore-title">A MISSÃO</div>
+            <p>Sua tarefa: pilotar o submarino de extração, coletar os fragmentos e escapar. O tempo é seu maior
+              inimigo. O abismo é o seu limite.</p>
           </div>
 
         </div>
@@ -259,6 +263,55 @@
             <canvas id="lose-quota" width="70" height="60"></canvas>
             <h4>COTA NÃO ATINGIDA</h4>
             <p>O submarino retorna à refinaria com menos fragmentos do que o mínimo exigido pela missão.</p>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+         MARKET & USP — O DIFERENCIAL
+        ══════════════════════════════════════════ -->
+        <div id="market-strategy"
+          style="margin-top:100px; padding-top:60px; border-top: 1px solid rgba(0,200,255,0.05)">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 60px;">
+            <div class="reveal">
+              <span class="sec-tag">// estratégia & público</span>
+              <h3 class="sec-title" style="font-size:28px">POR QUE <span class="accent-cyan">DEEP HORIZON?</span></h3>
+              <p style="font-size:14px; color:var(--white-dim); line-height:1.7">
+                Diferente de simuladores complexos, focamos na <strong>tensão atmosférica</strong> e no
+                <strong>loop de gameplay tático</strong>. O jogador não luta apenas contra monstros,
+                mas contra a ganância de buscar "só mais um fragmento" enquanto o O₂ pisca no vermelho.
+              </p>
+              <div style="margin-top:24px; display:flex; gap:12px">
+                <div style="background:rgba(0,200,255,0.1); padding:12px; border-radius:4px; flex:1">
+                  <span style="font-size:9px; color:var(--cyan); display:block; margin-bottom:4px">PÚBLICO-ALVO</span>
+                  <span style="font-size:12px; font-weight:bold">Fãs de Survival Horror e Roguelikes Atmosféricos</span>
+                </div>
+                <div style="background:rgba(0,229,204,0.1); padding:12px; border-radius:4px; flex:1">
+                  <span style="font-size:9px; color:var(--teal); display:block; margin-bottom:4px">CORE
+                    EXPERIENCE</span>
+                  <span style="font-size:12px; font-weight:bold">Tensão Máxima / Gestão de Recursos</span>
+                </div>
+              </div>
+            </div>
+            <div class="reveal" style="display:flex; flex-direction:column; justify-content:center">
+              <ul style="list-style:none; display:flex; flex-direction:column; gap:16px">
+                <li style="display:flex; gap:12px; align-items:flex-start">
+                  <span style="color:var(--cyan)">[✔]</span>
+                  <div>
+                    <strong style="font-size:13px">Diferenciação Visual:</strong>
+                    <p style="font-size:11px; opacity:0.6">Estética Lo-Fi High-Tech que mistura nostalgia 16-bit com
+                      iluminação dinâmica moderna.</p>
+                  </div>
+                </li>
+                <li style="display:flex; gap:12px; align-items:flex-start">
+                  <span style="color:var(--cyan)">[✔]</span>
+                  <div>
+                    <strong style="font-size:13px">Narrativa Ambiental:</strong>
+                    <p style="font-size:11px; opacity:0.6">O cenário conta a história. O naufrágio não é apenas um mapa,
+                      é uma biografia do desastre.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -578,14 +631,29 @@
 
         <div class="inspiration-container reveal" style="transition-delay:.3s">
           <div class="inspiration-text">
-            <p>A imensidão desconhecida, o medo do que espreita na escuridão e a maravilha da descoberta biológica.</p>
-            <p><em>DEEP HORIZON</em> nasceu da paixão pela atmosfera de isolamento e sobrevivência que games como
-              <strong>Subnautica</strong> eternizaram. Prestamos homenagem à obra que nos ensinou que o oceano é o lugar
-              mais alienígena da Terra.
-            </p>
+            <p>A imensidão desconhecida e o medo do que espreita na escuridão. <em>DEEP HORIZON</em> nasceu da paixão
+              pela atmosfera de isolamento e sobrevivência que games como <strong>Subnautica</strong> eternizaram.</p>
+            <div class="mood-board" style="margin-top: 24px">
+              <div class="mood-token" style="background:var(--abyss1); border:1px solid var(--cyan)">MISTÉRIO</div>
+              <div class="mood-token" style="background:var(--cyan-dim); color:white">TECNOLOGIA</div>
+              <div class="mood-token" style="background:var(--danger-dim); border:1px solid var(--danger)">ISOLAMENTO
+              </div>
+              <div class="mood-token" style="background:var(--deep)">ABISMO</div>
+            </div>
           </div>
-          <div id="subnautica-frame">
-            <img src="imgs/subnautica.png" alt="Inspiração Subnautica" id="subnautica-img">
+          <div id="subnautica-frame" class="mood-visual-grid"
+            style="border:none; background:none; box-shadow:none; padding:0; overflow:hidden">
+            <div class="mood-image-wrap"
+              style="border:1px solid rgba(0, 200, 255, 0.2); background:rgba(0,10,20,0.5); padding:10px; position:relative">
+              <img src="imgs/subnautica.png" alt="Mood 1" id="subnautica-img" class="mood-img">
+              <span class="mood-label">REFERÊNCIA: ATMOSFERA</span>
+            </div>
+            <div class="mood-palette">
+              <div style="background:var(--cyan); height:25%"></div>
+              <div style="background:var(--teal); height:25%"></div>
+              <div style="background:var(--abyss2); height:25%"></div>
+              <div style="background:var(--danger); height:25%"></div>
+            </div>
             <div class="frame-glitch"></div>
           </div>
         </div>
@@ -617,41 +685,46 @@
           <div class="team-card reveal" style="transition-delay:.1s">
             <canvas class="team-avatar" id="av-0" width="56" height="56"></canvas>
             <div class="team-name">GUSTAVO VITOR</div>
-            <div class="team-role">SPRITES & SPRITESHEETS</div>
+            <div class="team-role">ART LEAD & SPRITES</div>
             <p style="margin-top:10px;font-size:11.5px;color:rgba(150,200,180,.5);line-height:1.6;font-weight:200">
-              Responsável por dar vida visual ao jogo — cada criatura, cada fragmento, cada animação.</p>
+              Especialista em animação pixel-art e sistemas de iluminação 2D. Garante que cada pixel transmita o terror
+              do abismo.</p>
           </div>
 
           <div class="team-card reveal" style="transition-delay:.2s">
             <canvas class="team-avatar" id="av-1" width="56" height="56"></canvas>
             <div class="team-name">GUSTAVO KENJI</div>
-            <div class="team-role">LEVEL DESIGN</div>
+            <div class="team-role">LEVEL ARCHITECT</div>
             <p style="margin-top:10px;font-size:11.5px;color:rgba(150,200,220,.5);line-height:1.6;font-weight:200">
-              Arquiteto dos mapas abissais — cada corredor, cada câmara escura, cada armadilha escondida.</p>
+              Focado em Level Design sistêmico. Arquiteto de ambientes opressivos que desafiam a navegação e o
+              gerenciamento de recursos.</p>
           </div>
 
           <div class="team-card reveal" style="transition-delay:.3s">
             <canvas class="team-avatar" id="av-2" width="56" height="56"></canvas>
             <div class="team-name">ADRIAN REZENDE</div>
-            <div class="team-role">PROGRAMAÇÃO</div>
+            <div class="team-role">CORE SYSTEMS ENGINEER</div>
             <p style="margin-top:10px;font-size:11.5px;color:rgba(180,160,255,.5);line-height:1.6;font-weight:200">
-              Transformando mecânicas e sistemas em código funcional — o motor que move o submarino.</p>
+              Especialista em lógica de estado e sistemas de gameplay. Responsável pela precisão cirúrgica dos controles
+              do submarino.</p>
           </div>
 
           <div class="team-card reveal" style="transition-delay:.4s">
             <canvas class="team-avatar" id="av-3" width="56" height="56"></canvas>
             <div class="team-name">BRUNO</div>
-            <div class="team-role">PROGRAMAÇÃO</div>
+            <div class="team-role">AI & PHYSICS PROGRAMMER</div>
             <p style="margin-top:10px;font-size:11.5px;color:rgba(180,160,255,.5);line-height:1.6;font-weight:200">
-              Co-desenvolvedor do sistema de combate, IA dos inimigos e física do ambiente aquático.</p>
+              Desenvolve IAs predatórias e simulações físicas de fluidos, criando encontros orgânicos e imprevisíveis.
+            </p>
           </div>
 
           <div class="team-card reveal" style="transition-delay:.5s">
             <canvas class="team-avatar" id="av-4" width="56" height="56"></canvas>
             <div class="team-name">CALLEBE</div>
-            <div class="team-role">LORE & CUTSCENES</div>
-            <p style="margin-top:10px;font-size:11.5px;color:rgba(255,200,120,.5);line-height:1.6;font-weight:200">Autor
-              da narrativa, criador do universo de Deep Horizon e roteirista das cutscenes do jogo.</p>
+            <div class="team-role">NARRATIVE DESIGNER</div>
+            <p style="margin-top:10px;font-size:11.5px;color:rgba(255,200,120,.5);line-height:1.6;font-weight:200">
+              Escritor e World Builder. Constrói a mitologia de Deep Horizon para garantir uma imersão narrativa
+              profunda.</p>
           </div>
         </div>
       </div>
